@@ -1,0 +1,309 @@
+body{
+  font-family : Arial,'ＭＳ Ｐゴシック',sans-serif;
+  text-align: justify;
+}
+
+$common_color1:#ECD078;
+$common_color2:#D95B43;
+$common_color3:#C02942;
+$common_color4:#542437;
+$common_color5:#53777A;
+
+$sub_color1:#555;
+$sub_color2:snow;
+
+p{
+  margin: 0;
+}
+
+ /*------------------------*/
+         /*Navigation*/
+  /*------------------------*/
+.Navigation{
+  padding: 10px 0;
+  background-color:$common_color1;
+  .NavigationBox{
+    display: flex;
+    align-items: center;
+    // justify-content: flex-end;
+    max-width: 1280px;
+    margin: 5px auto 10px;
+    .NavigationBrandBox{
+      margin: 0 auto 0 50px;
+        .NavigationBrandTitle{
+          margin: 0;
+        }
+    }
+    .NavigationList{
+      margin:0 50px;
+      padding-left: 0;
+      display: flex;
+      justify-content: flex-end;
+        .NavigationItems{
+          margin-left: 20px;
+          line-height: 1;
+          list-style: none;
+            a{
+              padding:7px 10px;
+              border: 1px solid $sub_color1;
+              border-radius: 3px;
+              display: block;
+              color:$sub_color1;
+                &:hover{
+                  box-shadow: 2px 2px 3px;
+                }
+            }
+        }
+    }
+  }
+}
+
+/*------------------------*/
+  /*TweetPostSection*/
+ /*------------------------*/
+
+.TweetPostSection{
+    padding:50px 0;
+    border-top: 2px solid $common_color4;
+    border-bottom: 2px solid $common_color4;
+    background-color: $common_color2;
+  .TweetPostFormBox{
+    max-width: 700px;
+    margin: 0 auto;
+      .TweetPostForm{
+        text-align: left;
+          .TweetPostTextarea{
+            max-width: 500px;
+          }
+      }
+  }
+  .InductionLoginBox{
+    max-width: 500px;
+    margin: 0 auto;
+    text-align: center;
+      .Induction{
+        padding: 10px 0;
+          button{
+            margin: 0 10px;
+              &:hover{
+                box-shadow: 2px 2px 4px;
+              }
+          }
+      }
+  }
+}
+
+/*------------------------*/
+        /*Form*/
+ /*------------------------*/
+
+
+  .FormBtn{
+    background-color: $sub_color2;
+    color:$common_color4;
+    border: 2px solid $common_color4;
+      &:hover{
+        box-shadow: 2px 2px 4px;
+      }
+  }
+  #Textarea{
+    background-color: $sub_color2;
+    border:2px solid $common_color4;
+  }
+  .file{
+    #File{
+      display: none;
+    }
+    #LabelFile{
+      padding:5px;
+      margin: 5px 0 0;
+        &:hover{
+          // opacity: 0.5;
+          cursor: pointer;
+        }
+    }
+  }
+
+
+/*------------------------*/
+        /*main*/
+ /*------------------------*/
+main{
+  max-width: 1280px;
+  margin: 0 auto;
+  .MainArticle{
+    display: flex;
+    max-width: 800px;
+    padding: 20px;
+    border-bottom: 1px solid #555;
+    margin: 15px auto;
+      &:last-child{
+        border-bottom: none;
+      }
+      .MainIconBox{
+        height: 60px;
+        width: 60px;
+        margin: 0 50px 0 0;
+            .MinIcon{
+              width: 100%;
+              border-radius: 50%;
+              border: 1px solid #ccc;
+            }
+      }
+      .MainAuthorPostBox{
+        width: 700px;
+        .MainAuthorName{
+          display: flex;
+          width: 650px;
+          padding: 0 0 15px 0;
+          .NameBox{
+            padding: 1px 5px;
+            border-radius: 3px;
+            background-color:#ccc;
+            &:before{
+              font-family: "Font Awesome 5 Free";
+              content:"\f007";
+              font-weight: 900;
+              color:$sub_color1;
+            }
+            a{
+              font-size: 14px;
+              color:$sub_color1;
+            }
+          }
+          .TimeBox{
+            margin-left: auto;
+             time{
+               color: #ccc;
+                 &:before{
+                   font-family: "Font Awesome 5 Free";
+                   content: "\f017";
+                   font-weight: 900;
+                   margin-right: 5px;
+                 }
+             }
+          }
+        }
+        .MainPostImageBox{
+          text-align: left;
+          margin: 20px 0;
+            .MainPostImage{
+              border-radius: 5px;
+              border: 2px solid $sub_color1;
+                &:hover{
+                  opacity: 0.5;
+                }
+            }
+        }
+        .TinkerBox{
+          display: flex;
+            .DeleteIconBox{
+              margin-left: auto;
+            }
+        }
+        .fa-comment{
+          color: $common_color5;
+        }
+        .fa-trash-alt{
+          color: #ccc;
+           &:hover{
+             cursor: pointer;
+           }
+        }
+        .MaxReplayPost{
+          color:#ccc;
+        }
+      }
+  }
+}
+
+
+
+/*------------------------*/
+        /*Mypage.php*/
+ /*------------------------*/
+ /*------------------------*/
+        /*ProfileSection*/
+  /*------------------------*/
+.ProfileSectionWrapper{
+  .ProfileSection{
+    max-width:100%;
+    height: 400px;
+    margin: 0 auto;
+    border-top: 2px solid $common_color4;
+    background-color: $common_color2;
+    .ProfileBox{
+      padding:50px;
+      .ProfileInnerBox{
+        display: flex;
+        padding: 50px 20px;
+        margin: 0 auto;
+        border: 1px solid $sub_color1;
+        border-radius: 5px;
+        max-width: 700px;
+        background-color: $sub_color2;
+        .UserIconBox{
+          margin-left: auto;
+            .UserIcon{
+              border-radius: 50%;
+              border: 1px solid $sub_color1;
+            }
+            .UserName{
+              text-align: center;
+            }
+        }
+        .S-IntoroductionBox{
+          display: flex;
+          align-items: center;
+          width: 800px;
+          margin: 0 0 0 50px;
+        }
+      }
+    }
+    .ProfileEditTriggerBox{
+      margin: 20px auto;
+      text-align: right;
+      max-width: 700px;
+    }
+    .ProfileEditBox{
+      position: relative;
+      z-index: 1;
+      max-width: 700px;
+      margin: 0 auto;
+      padding: 50px 15px;
+      border-radius: 3px;
+      background-color: $common_color5;
+      display: none;
+    }
+  }
+}
+
+  .MainArticle{
+    position: relative;
+    z-index: 0;
+    a{
+      text-decoration: none;
+      color:$sub_color1;
+        &:hover{
+          opacity:0.5;
+        }
+    }
+  }
+
+  /*------------------------*/
+          /*Reply_Posts.php*/
+   /*------------------------*/
+
+
+  /*------------------------*/
+         /*InsertFormBox*/
+  /*------------------------*/
+  .InsertFormSection{
+    width: 100%;
+      .InsertFormBox{
+        max-width: 500px;
+        margin: 50px auto 0;
+        border: 1px dashed #555;
+        padding: 20px 50px;
+      }
+  }
