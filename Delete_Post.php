@@ -84,23 +84,16 @@ if(isset($_REQUEST['Reply'])){
 if(isset($_REQUEST['acount'])){
   $acount = $_REQUEST['acount'];
   if($acount){
-    if(is_numeric($acount) === true && $_SESSION['id']){
-      $statment = $db->prepare('SELECT * FROM userinfo,tweets,replay_posts WHERE userinfo.user_id=? and tweets.author_id=? and replay_posts.reply_author_id=?');
-      $statment->execute(array($_SESSION['id'],$_SESSION['id'],$_SESSION['id']));
-      $user = $statment->fetch();
-    }
+    $delete = $db->prepare('DELETE  FROM userinfo where user_id=?');
+    $delete->execute(array($acount));
 
-    if($user['user_id']===NUll && $user['author_id'] === null && $user['reply_author_id'] === null){
-      $delete = $db->prepare('DELETE  FROM userinfo WHERE user_id=?');
-      $delete->execute(array($_SESSION['id']));
-      session_destroy();
-      // header('Location:index.php');exit();
-      echo "userinfoだけ消した";
-    }elseif(isset($user['user_id'],$user['author_id'],$user['reply_author_id'])){
-      $delete = $db->prepare('DELETE userinfo,tweets,replay_posts FROM userinfo,tweets,replay_posts WHERE userinfo.user_id=? and tweets.author_id=? and replay_posts.reply_author_id=?');
-      $delete->execute(array($_SESSION['id'],$_SESSION['id'],$_SESSION['id']));
-      session_destroy();
-      echo "全消し";
+    $deletea = $db->prepare('DELETE  FROM tweets where author_id=?');
+    if(!empty($deletea)){
+      $deletea->execute(array($acount));
+    }else {
+      echo "失敗";
     }
+    $deleteb = $db->prepare('DELETE  FROM replay_posts where reply_author_id=?');
+    $deleteb->execute(array($acount));
   }
 }

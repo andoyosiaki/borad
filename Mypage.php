@@ -145,7 +145,7 @@ if(isset($_SESSION['id'])){
       <div class="TinkerBox">
         <div class="ReplyIconBox">
           <a href="Reply_Posts.php?page=<?php echo $rec['tweets_id'] ;  ?>"><i class="far fa-comment fa-lg "></i></a>
-          <?php if($rec['maxpost'] > 0): ?><span class="MaxReplayPost"><?php echo $rec['maxpost']; ?></span><?php endif; ?>
+          <?php if($rec['maxpost'] > 0): ?><span class="MaxReplayPost"><i class="fas fa-reply"></i></span><?php endif; ?>
         </div>
         <?php if($_SESSION['id'] === $rec['author_id']): ?>
         <div class="DeleteIconBox">

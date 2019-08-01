@@ -11,9 +11,6 @@ ini_set('display_errors',1);
 $statment = $db->query('SELECT * FROM tweets INNER JOIN userinfo on userinfo.user_id=tweets.author_id order by tweets.tweets_id DESC');
 
 
-
-var_dump($_SERVER['REQUEST_URI']);
-
  ?>
  <!DOCTYPE html>
  <html lang="ja">
@@ -108,7 +105,7 @@ var_dump($_SERVER['REQUEST_URI']);
         <div class="TinkerBox">
           <div class="ReplyIconBox">
             <object><a href="Reply_Posts.php?page=<?php echo $rec['tweets_id'] ;  ?>"><i class="far fa-comment fa-lg "></i></a></object>
-            <?php if($rec['maxpost'] > 0): ?><span class="MaxReplayPost"><?php echo $rec['maxpost']; ?></span><?php endif; ?>
+            <?php if($rec['maxpost'] > 0): ?><span class="MaxReplayPost"><i class="fas fa-reply"></i></span><?php endif; ?>
           </div>
           <?php if($_SESSION && $_SESSION['id'] === $rec['author_id']): ?>
           <div class="DeleteIconBox">
