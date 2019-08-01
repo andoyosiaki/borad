@@ -43,7 +43,6 @@ if(!empty($_POST)){
     header('Location:next.php');exit();
     var_dump($_SESSION['join']);
   }
-
 }
 
 

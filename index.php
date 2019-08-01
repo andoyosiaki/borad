@@ -12,6 +12,8 @@ $statment = $db->query('SELECT * FROM tweets INNER JOIN userinfo on userinfo.use
 
 
 
+var_dump($_SERVER['REQUEST_URI']);
+
  ?>
  <!DOCTYPE html>
  <html lang="ja">

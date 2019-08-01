@@ -28,8 +28,6 @@ if(isset($_SESSION['id'])){
 
 
 
-
-
  ?>
  <!DOCTYPE html>
  <html lang="ja">
@@ -101,12 +99,11 @@ if(isset($_SESSION['id'])){
                 </div>
                 <button type="submit" class="btn btn-lg FormBtn">　送　信　</button>
               </form>
-              <!-- <button type="" class="btn btn-lg" id="<?php echo $rec['user_id']; ?>">退会する</button> -->
-              <p id="<?php echo $rec['user_id']; ?>">退会する</p>
+              <p id="delete">退会する</p>
             </div>
           </div>
           <script>
-            $('#<?php echo $rec['user_id']; ?>').click(function(){
+            $('#delete').click(function(){
                 if(!confirm('本当に削除しますか？')){
                     return false;
                 }else{

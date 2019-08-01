@@ -89,7 +89,7 @@ if(isset($_REQUEST['acount'])){
       $statment->execute(array($_SESSION['id'],$_SESSION['id'],$_SESSION['id']));
       $user = $statment->fetch();
     }
-    
+
     if($user['user_id']===NUll && $user['author_id'] === null && $user['reply_author_id'] === null){
       $delete = $db->prepare('DELETE  FROM userinfo WHERE user_id=?');
       $delete->execute(array($_SESSION['id']));

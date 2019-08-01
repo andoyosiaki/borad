@@ -13,19 +13,12 @@ define('MAX_FILE_SIZE', 4 * 1024 * 1024); // 1MB
   ));
   $rec = $statment->fetch();
 
-    //url直接打ち込みアクセス対策
-  // if($rec['tweets_id']===$_REQUEST['page']){
-    $statments = $db->prepare('SELECT * FROM replay_posts JOIN tweets ON replay_posts.reply_id=tweets.tweets_id RIGHT JOIN userinfo ON userinfo.user_id=replay_posts.reply_author_id WHERE replay_posts.reply_id=? AND tweets_id=?');
-    $statments->execute(array(
-      $_REQUEST['page'],
-      $_REQUEST['page']
-    ));
-  // }
-  // else {
-  //   header('Location:index.php');exit();
-  //   echo "失敗";
-  // }
 
+  $statments = $db->prepare('SELECT * FROM replay_posts JOIN tweets ON replay_posts.reply_id=tweets.tweets_id RIGHT JOIN userinfo ON userinfo.user_id=replay_posts.reply_author_id WHERE replay_posts.reply_id=? AND tweets_id=?');
+  $statments->execute(array(
+    $_REQUEST['page'],
+    $_REQUEST['page']
+  ));
 
 
 ?>

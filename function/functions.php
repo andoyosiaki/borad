@@ -13,4 +13,6 @@ function newline($text){
   $texts = h($text);
   return nl2br($texts);
 }
+
+
  ?>
