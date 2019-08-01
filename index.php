@@ -11,6 +11,7 @@ ini_set('display_errors',1);
 $statment = $db->query('SELECT * FROM tweets INNER JOIN userinfo on userinfo.user_id=tweets.author_id order by tweets.tweets_id DESC');
 
 
+
  ?>
  <!DOCTYPE html>
  <html lang="ja">
@@ -47,7 +48,7 @@ $statment = $db->query('SELECT * FROM tweets INNER JOIN userinfo on userinfo.use
 <!-- Navigation -->
 <!-- TweetPostSection & Form -->
     <div class="TweetPostSection">
-      <?php if($_SESSION): ?>
+      <?php if(!empty($_SESSION)): ?>
       <div class="TweetPostFormBox">
         <form class="TweetPostForm" action="Posts_Validate.php" method="post" enctype="multipart/form-data">
           <textarea class="form-control" name="text" rows="5" placeholder="投稿内容は200文字以下で,画像は2M以下の.jpgか.pngのみUPできます。" id="Textarea"></textarea>
@@ -59,7 +60,7 @@ $statment = $db->query('SELECT * FROM tweets INNER JOIN userinfo on userinfo.use
           <button type="submit" class="btn btn-lg FormBtn">　送　信　</button>
         </form>
       </div>
-      <?php elseif(!$_SESSION): ?>
+    <?php elseif(empty($_SESSION)): ?>
       <div class="InductionLoginBox">
         <p>ログインすると投稿可能になります。</p>
         <div class="Induction">
@@ -112,9 +113,6 @@ $statment = $db->query('SELECT * FROM tweets INNER JOIN userinfo on userinfo.use
             <i class="far fa-trash-alt" id="<?php echo $rec['tweets_id']; ?>"></i>
           </div>
           <?php endif; ?>
-          <!-- <div class="favbox">
-            <i class="far fa-heart" id="favi"></i>
-          </div> -->
         </div>
       </div>
     </article>
