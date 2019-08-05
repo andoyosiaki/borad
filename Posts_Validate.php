@@ -7,6 +7,8 @@ ini_set('display_errors',1);
 
 if($_POST['MAX_FILE_SIZE'] > $_FILES['image']['size']){ //画像サイズの確認
   $image_size = 'sizetrue';
+}else {
+  header('Location:index.php');exit();
 }
 
 $statments = $db->query('SELECT * FROM tweets INNER JOIN userinfo on userinfo.user_id=tweets.author_id order by tweets.tweets_id DESC');
@@ -42,30 +44,31 @@ $img_error = $_FILES['image']['error'];
        }else {
          header('Location:index.php');exit();
        }
-    }
-    else {
+    }else {
      $img_adress = 0;
      $error = 'extension';
+     var_dump($error);
     }
   }else {
     $img_adress = 0;
+    var_dump($img_adress);
   }
 
- if(mb_strlen($_POST['text']) < 200){
+  if(mb_strlen($_POST['text']) < 200){
    $true_text = $_POST['text'];
- }else {
-   header('Location:index.php');exit();
- }
+  }else {
+     header('Location:index.php');exit();
+  }
 
     //ログインしてる&POSTでアクセス&テキストが空じゃないor拡張子が.jpgか.pngの場合
-  if($_SESSION['id'] && $_SERVER['REQUEST_METHOD'] === 'POST' && $true_text !=='' || empty($error)){
+  if($_SESSION['id'] && $_SERVER['REQUEST_METHOD'] === 'POST' && !empty($true_text) || empty($error)){
     $statment = $db->prepare('INSERT INTO tweets SET author_id=?,content=?,tweet_img=?,create_at=NOW()');
     $statment->execute(array(
       $_SESSION['id'],
       $_POST['text'],
       $img_adress
     ));
-    header('Location:index.php');
+    header('Location:index.php');exit();
     //ログインしてる&POSTでアクセス&テキストが空&拡張子が.jpgか.png以外の場合
   }elseif ($_SESSION['id'] && $_SERVER['REQUEST_METHOD'] === 'POST' && $true_text ==='' && $error){
      header('Location:index.php');exit();

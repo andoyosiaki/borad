@@ -47,7 +47,7 @@ if(isset($_SESSION['id'])){
              </a>
            </div>
            <ul class="NavigationList">
-             <li class="NavigationItems" id="Mypage"><a href="Mypage.php?page=<?php echo  $_SESSION['id']; ?>">Mypage</a></li>
+            <li class="NavigationItems" id="Mypage"><a href="Mypage.php?page=<?php if(isset($_SESSION['id'])){ echo $_SESSION['id'];} ?>">Mypage</a></li>
              <li class="NavigationItems" id="Login"><a href="login.php">Login</a></li>
              <li class="NavigationItems" id="Logout"><a href="logout.php">Logout</a></li>
              <li class="NavigationItems" id="Register"><a href="Register.php">Register</a></li>

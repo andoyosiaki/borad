@@ -41,18 +41,15 @@ if(isset($_FILES['image']['name'])){
   }
 }
 
-// $length =  mb_strlen($_POST['intorotext']);
+
  if($_SERVER['REQUEST_METHOD'] === 'POST' && $_SESSION['id'] && mb_strlen($_POST['intorotext']) < 200  ){
     //画像を変更しない場合の処理
    if($_FILES['image']['name'] === ''){
      if($_POST['hidden_img'] === null){
-       $_POST['hidden_img'] = '0.png';
         $img_adress = $_POST['hidden_img'];
      }
-
    }
 var_dump($img_adress);
-var_dump($_FILES['image']['name']);
   $statment = $db->prepare('UPDATE userinfo SET intoroduction=?,icon=? WHERE user_id=?');
   $statment->execute(array(
     $_POST['intorotext'],

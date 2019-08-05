@@ -8,6 +8,7 @@ define('MAX_FILE_SIZE', 4 * 1024 * 1024); // 1MB
 $statments = $db->query('SELECT * FROM replay_posts INNER JOIN userinfo on userinfo.user_id=replay_posts.reply_id order by replay_posts.re_create_at DESC');
 $rec = $statments->fetch();
 
+//画像のバリデーションと保存処理とサイズの加工処理
 if(isset($_SESSION['id'])){
   if(isset($_FILES['image']['name']) && $_SERVER['REQUEST_METHOD'] === 'POST'){
     $ext = substr($_FILES['image']['name'],-4);

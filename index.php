@@ -12,39 +12,9 @@ $statment = $db->query('SELECT * FROM tweets INNER JOIN userinfo on userinfo.use
 
 
  ?>
- <!DOCTYPE html>
- <html lang="ja">
- <head>
- 	<meta charset="utf-8">
- 	<meta name="viewport" content="width=device-width, initial-scale=1">
- 	<title>twiiterもどき(仮)</title>
- 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
- 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
- 	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
- 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
- 	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css" integrity="sha384-oS3vJWv+0UjzBfQzYUhtDYW+Pj2yciDJxpsK1OYPAYjqT085Qq/1cq5FLXAZQ7Ay" crossorigin="anonymous">
- 	<script type="text/javascript" src="inview/jquery.inview.min.js"></script>
- 	<link rel="stylesheet" href="animate/animate.min.css">
- 	<link href="css/style.css" rel="stylesheet">
- 	<script src="js/main.js"></script>
- </head>
- <body>
-  <header>
-<!-- Navigation -->
-    <nav class="Navigation">
-      <div class="NavigationBox">
-        <div class="NavigationBrandBox">
-          <h1 class="NavigationBrandTitle">twiiterもどき(仮)</h1>
-        </div>
-        <ul class="NavigationList">
-          <li class="NavigationItems" id="Mypage"><a href="Mypage.php?page=<?php echo $_SESSION['id']; ?>">Mypage</a></li>
-          <li class="NavigationItems" id="Login"><a href="login.php">Login</a></li>
-          <li class="NavigationItems" id="Logout"><a href="logout.php">Logout</a></li>
-          <li class="NavigationItems" id="Register"><a href="Register.php">Register</a></li>
-        </ul>
-      </div>
-    </nav>
-<!-- Navigation -->
+
+<?php require_once('./head.php'); ?>
+
 <!-- TweetPostSection & Form -->
     <div class="TweetPostSection">
       <?php if(!empty($_SESSION)): ?>
@@ -59,17 +29,16 @@ $statment = $db->query('SELECT * FROM tweets INNER JOIN userinfo on userinfo.use
           <button type="submit" class="btn btn-lg FormBtn">　送　信　</button>
         </form>
       </div>
-    <?php elseif(empty($_SESSION)): ?>
+      <?php elseif(empty($_SESSION)): ?>
       <div class="InductionLoginBox">
         <p>ログインすると投稿可能になります。</p>
         <div class="Induction">
           <a href="login.php"><button type="button" class="btn bg-primary">Login</button></a>
           <a href="Register.php"><button type="button" class="btn bg-warning">Register</button></a>
         </div>
-        </div>
       </div>
-      <?php endif; ?>
     </div>
+      <?php endif; ?>
 <!-- TweetPostSection & Form -->
   </header>
 <!-- main -->
@@ -105,7 +74,7 @@ $statment = $db->query('SELECT * FROM tweets INNER JOIN userinfo on userinfo.use
         <div class="TinkerBox">
           <div class="ReplyIconBox">
             <object><a href="Reply_Posts.php?page=<?php echo $rec['tweets_id'] ;  ?>"><i class="far fa-comment fa-lg "></i></a></object>
-            <?php if($rec['maxpost'] > 0): ?><span class="MaxReplayPost"><i class="fas fa-reply"></i></span><?php endif; ?>
+            <?php if($rec['maxpost'] > 0): ?><span class="MaxReplayPost"><?php echo $rec['maxpost']; ?></span><?php endif; ?>
           </div>
           <?php if($_SESSION && $_SESSION['id'] === $rec['author_id']): ?>
           <div class="DeleteIconBox">

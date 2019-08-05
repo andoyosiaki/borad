@@ -9,15 +9,22 @@ ini_set('display_errors',1);
 if(isset($_REQUEST['page'])){
   $page = $_REQUEST['page'];
   if($page){
-    if( is_numeric($page) === true && $_SESSION['id']){
+    if(isset($_SESSION['id'])){
       $statment = $db->prepare('SELECT * FROM tweets WHERE author_id=?');
       $statment->execute(array($_SESSION['id']));
       $user = $statment->fetch();
     }else {
       header('Location:index.php');exit();
     }
+      //画像ファイルの削除
+    if(isset($user['tweet_img']) && $user['tweet_img'] !==0){
+      $file = 'images/Proto_img/'.$user['tweet_img'];
+      $files = 'images/Compre_img/'.$user['tweet_img'];
+      unlink($file);
+      unlink($files);
+    }
 
-    if($_SESSION['id']===$user['author_id']){
+    if($_SESSION['id'] === $user['author_id']){
       if($page === $user['tweets_id'] && $user['maxpost'] > 0){
       $delete = $db->prepare('DELETE tweets,replay_posts FROM tweets,replay_posts WHERE tweets.tweets_id=? and replay_posts.reply_id=?');
       $delete->execute(array(
@@ -41,13 +48,21 @@ if(isset($_REQUEST['page'])){
 if(isset($_REQUEST['Reply'])){
   $reply = $_REQUEST['Reply'];
   if($reply){
-    if( is_numeric($reply) === true && $_SESSION['id']){
+    if(isset($_SESSION['id'])){
       $statment = $db->prepare('SELECT * FROM replay_posts WHERE reply_co_id=?');
       $statment->execute(array($reply));
       $user = $statment->fetch();
     }else {
       header('Location:index.php');exit();
     }
+
+    //画像ファイルの削除
+  if(isset($user['reply_img']) && $user['reply_img'] !==null){
+    $file = 'images/Reply_Proto_img/'.$user['reply_img'];
+    $files = 'images/Reply_Compre_img/'.$user['reply_img'];
+    unlink($file);
+    unlink($files);
+  }
 
     if($_SESSION['id']===$user['reply_author_id']){
       if($reply === $user['reply_co_id']){

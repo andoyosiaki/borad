@@ -12,8 +12,6 @@ if(isset($_SESSION['join'])){
     $_SESSION['join']['icon']
   ));
   header('Location:login.php');exit();
-  // echo "登録完了";
 }else {
   header('Location:index.php');exit();
-  // echo "登録失敗";
 }
