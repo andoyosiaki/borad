@@ -98,17 +98,56 @@ if(isset($_REQUEST['Reply'])){
   //退会申請
 if(isset($_REQUEST['acount'])){
   $acount = $_REQUEST['acount'];
+
+    if(isset($_SESSION['id'])){
+      $statment = $db->prepare('SELECT * FROM userinfo,tweets,replay_posts WHERE user_id=?');
+      $statment->execute(array($acount));
+      $user = $statment->fetch();
+    }else {
+      header('Location:index.php');exit();
+    }
+    var_dump($user);
+    //画像ファイルの削除
+  if(isset($user['icon'])){
+    if($user['icon'] !=='0.png'){
+      $file = 'images/Profile_Proto_img/'.$user['icon'];
+    }
+    $files = 'images/Profile_Compre_img/'.$user['icon'];
+    unlink($file);
+    unlink($files);
+    echo "userinfo";
+  }
+
+    //画像ファイルの削除
+  if(isset($user['reply_img']) && $user['reply_img'] !==null){
+    $file = 'images/Reply_Proto_img/'.$user['reply_img'];
+    $files = 'images/Reply_Compre_img/'.$user['reply_img'];
+    unlink($file);
+    unlink($files);
+    echo "tweets";
+  }
+
+  //画像ファイルの削除
+  if(isset($user['tweet_img']) && $user['tweet_img'] !==0){
+  $file = 'images/Proto_img/'.$user['tweet_img'];
+  $files = 'images/Compre_img/'.$user['tweet_img'];
+  unlink($file);
+  unlink($files);
+  echo "Reply_Posts";
+  }
+
   if($acount){
-    $delete = $db->prepare('DELETE  FROM userinfo where user_id=?');
+    $delete = $db->prepare('DELETE  FROM userinfo where user_id=?'); //ユーザー情報を削除
     $delete->execute(array($acount));
 
-    $deletea = $db->prepare('DELETE  FROM tweets where author_id=?');
-    if(!empty($deletea)){
-      $deletea->execute(array($acount));
-    }else {
-      echo "失敗";
-    }
-    $deleteb = $db->prepare('DELETE  FROM replay_posts where reply_author_id=?');
+    $deletea = $db->prepare('DELETE  FROM tweets where author_id=?'); //ツイートを投稿していたら全て削除。ツイートしてなかったら何も処理しない。
+      if(!empty($deletea)){
+        $deletea->execute(array($acount));
+      }
+
+    $deleteb = $db->prepare('DELETE  FROM replay_posts where reply_author_id=?'); //返信ツイートをしていたら削除
     $deleteb->execute(array($acount));
   }
+  session_destroy();
+  header('Location:index.php');exit();
 }
