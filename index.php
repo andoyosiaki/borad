@@ -6,8 +6,6 @@ require "function/functions.php";
 define('MAX_FILE_SIZE', 4 * 1024 * 1024); // 1MB
 ini_set('display_errors',1);
 
-
-
 $statment = $db->query('SELECT * FROM tweets INNER JOIN userinfo on userinfo.user_id=tweets.author_id order by tweets.tweets_id DESC');
 
 

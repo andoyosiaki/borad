@@ -98,7 +98,8 @@ if(isset($_REQUEST['Reply'])){
   //退会申請
 if(isset($_REQUEST['acount'])){
   $acount = $_REQUEST['acount'];
-
+  var_dump($acount);
+var_dump($_SESSION['id']);
     if(isset($_SESSION['id'])){
       $statment = $db->prepare('SELECT * FROM userinfo,tweets,replay_posts WHERE user_id=?');
       $statment->execute(array($acount));
@@ -106,35 +107,20 @@ if(isset($_REQUEST['acount'])){
     }else {
       header('Location:index.php');exit();
     }
+    
     var_dump($user);
     //画像ファイルの削除
-  if(isset($user['icon'])){
+  if(isset($user['icon']) && $user['icon'] !=='0.png'){
     if($user['icon'] !=='0.png'){
       $file = 'images/Profile_Proto_img/'.$user['icon'];
     }
     $files = 'images/Profile_Compre_img/'.$user['icon'];
-    unlink($file);
-    unlink($files);
-    echo "userinfo";
+    if(isset($files) && isset($file)){
+      unlink($file);
+      unlink($files);
+    }
   }
 
-    //画像ファイルの削除
-  if(isset($user['reply_img']) && $user['reply_img'] !==null){
-    $file = 'images/Reply_Proto_img/'.$user['reply_img'];
-    $files = 'images/Reply_Compre_img/'.$user['reply_img'];
-    unlink($file);
-    unlink($files);
-    echo "tweets";
-  }
-
-  //画像ファイルの削除
-  if(isset($user['tweet_img']) && $user['tweet_img'] !==0){
-  $file = 'images/Proto_img/'.$user['tweet_img'];
-  $files = 'images/Compre_img/'.$user['tweet_img'];
-  unlink($file);
-  unlink($files);
-  echo "Reply_Posts";
-  }
 
   if($acount){
     $delete = $db->prepare('DELETE  FROM userinfo where user_id=?'); //ユーザー情報を削除
@@ -149,5 +135,5 @@ if(isset($_REQUEST['acount'])){
     $deleteb->execute(array($acount));
   }
   session_destroy();
-  header('Location:index.php');exit();
+  // header('Location:index.php');exit();
 }

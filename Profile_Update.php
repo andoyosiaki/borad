@@ -8,23 +8,35 @@ ini_set('display_errors',1);
 $img_error = $_FILES['image']['error'];
 
 if(isset($_FILES['image']['name'])){
+
+  //新しいアイコンを保存する前に古いアイコンの削除処理を行う
+  $statment = $db->prepare('SELECT * from userinfo where user_id=?');
+  $statment->execute(array($_SESSION['id']));
+  $user = $statment->fetch();
+  if(isset($user['icon']) && $user['icon'] !=='0.png'){
+  $file = 'images/Profile_Compre_img/'.$user['icon'];
+  $files = 'images/Profile_Proto_img/'.$user['icon'];
+  }
+  if(isset($file) && isset($files)){
+    unlink($file);
+    unlink($files);
+  }
+
+  //投稿されたアイコンのサイズ加工処理と元画像と加工した画像の保存
   $ext = substr($_FILES['image']['name'],-4);
-
-
   if($ext === '.jpg' || $ext === '.png' && $img_error === 0){
     $day = time();
     $img_adress =  $day.$_SESSION['id'].$ext;
     move_uploaded_file($_FILES['image']['tmp_name'],'images/Profile_Proto_img/'."$img_adress");
 
-
-    $info = substr('images/Profile_Proto_img/'."$img_adress",-4);
-    list($width, $hight) = getimagesize('images/Profile_Proto_img/'."$img_adress"); // 元の画像名を指定してサイズを取得
+    // $info = substr('images/Profile_Proto_img/'."$img_adress",-4);
+    list($width, $hight,$info) = getimagesize('images/Profile_Proto_img/'."$img_adress"); // 元の画像名を指定してサイズを取得
 
     switch($info){
-    case '.jpg':
+    case 2:
     $baseImage = imagecreatefromjpeg("images/Profile_Proto_img/"."$img_adress");
     break;
-    case '.png':
+    case 3:
     $baseImage = imagecreatefrompng("images/Profile_Proto_img/"."$img_adress");
     break;
     }
@@ -42,14 +54,13 @@ if(isset($_FILES['image']['name'])){
 }
 
 
- if($_SERVER['REQUEST_METHOD'] === 'POST' && $_SESSION['id'] && mb_strlen($_POST['intorotext']) < 200  ){
+ if($_SERVER['REQUEST_METHOD'] === 'POST' && $_SESSION['id'] && mb_strlen($_POST['intorotext']) < 200  ){ //プロフィールのテキストは200文字以内に指定
     //画像を変更しない場合の処理
    if($_FILES['image']['name'] === ''){
      if($_POST['hidden_img'] === null){
         $img_adress = $_POST['hidden_img'];
      }
    }
-var_dump($img_adress);
   $statment = $db->prepare('UPDATE userinfo SET intoroduction=?,icon=? WHERE user_id=?');
   $statment->execute(array(
     $_POST['intorotext'],
