@@ -5,13 +5,13 @@ require "function/functions.php";
 ini_set('display_errors',1);
 
 
-if($_REQUEST['page'] && $_SESSION['id']){
+
   $statment = $db->prepare('SELECT * FROM replay_posts WHERE reply_img=?');
   $statment->execute(array(
     $_REQUEST['page']
   ));
   $image= $statment->fetch();
-}
+
 
  ?>
 <!DOCTYPE html>

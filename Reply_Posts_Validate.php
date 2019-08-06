@@ -5,8 +5,6 @@ ini_set('display_errors',1);
 
 define('MAX_FILE_SIZE', 4 * 1024 * 1024); // 1MB
 
-$statments = $db->query('SELECT * FROM replay_posts INNER JOIN userinfo on userinfo.user_id=replay_posts.reply_id order by replay_posts.re_create_at DESC');
-$rec = $statments->fetch();
 
 //画像のバリデーションと保存処理とサイズの加工処理
 if(isset($_SESSION['id'])){
@@ -14,7 +12,7 @@ if(isset($_SESSION['id'])){
     $ext = substr($_FILES['image']['name'],-4);
     if($ext === '.jpg' || $ext === '.png'){
       $day = time();
-      $img_adress =  $day.$_SESSION['id'].$ext;
+      $img_adress =  $_POST['reply_author_name'].$day.$_SESSION['id'].$ext;
       move_uploaded_file($_FILES['image']['tmp_name'],'images/Reply_Proto_img/'."$img_adress");
 
 

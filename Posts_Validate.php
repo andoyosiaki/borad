@@ -11,7 +11,10 @@ if($_POST['MAX_FILE_SIZE'] > $_FILES['image']['size']){ //画像サイズの確�
   header('Location:index.php');exit();
 }
 
-$statments = $db->query('SELECT * FROM tweets INNER JOIN userinfo on userinfo.user_id=tweets.author_id order by tweets.tweets_id DESC');
+// $statments = $db->query('SELECT * FROM tweets INNER JOIN userinfo on userinfo.user_id=tweets.author_id order by tweets.tweets_id DESC');
+$statments = $db->query('SELECT * FROM userinfo where user_id');
+// $statments = $db->query('SELECT * FROM userinfo WHERE user_id=?');
+// $statments->execute(array($_SESSION['id']))
 $rec = $statments->fetch();
 
 $img_error = $_FILES['image']['error'];
@@ -21,7 +24,7 @@ $img_error = $_FILES['image']['error'];
 
     if($ext === '.jpg' || $ext === '.png' && $img_error === 0){
       $day = time();
-      $img_adress =  $day.$_SESSION['id'].$ext;
+      $img_adress =  $rec['name'].$day.$_SESSION['id'].$ext;
       move_uploaded_file($_FILES['image']['tmp_name'],'images/Proto_img/'."$img_adress");
 
 
@@ -47,11 +50,9 @@ $img_error = $_FILES['image']['error'];
     }else {
      $img_adress = 0;
      $error = 'extension';
-     var_dump($error);
     }
   }else {
     $img_adress = 0;
-    var_dump($img_adress);
   }
 
   if(mb_strlen($_POST['text']) < 200){

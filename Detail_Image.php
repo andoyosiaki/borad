@@ -5,13 +5,13 @@ require "function/functions.php";
 ini_set('display_errors',1);
 
 
-if($_REQUEST['item'] && $_SESSION['id']){
+
   $statment = $db->prepare('SELECT * FROM tweets WHERE tweets_id=?');
   $statment->execute(array(
     $_REQUEST['item']
   ));
   $image= $statment->fetch();
-}
+
 
  ?>
 <!DOCTYPE html>
