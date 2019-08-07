@@ -25,7 +25,6 @@ p{
   .NavigationBox{
     display: flex;
     align-items: center;
-    // justify-content: flex-end;
     max-width: 1280px;
     margin: 5px auto 10px;
     .NavigationBrandBox{
@@ -118,7 +117,6 @@ p{
       padding:5px;
       margin: 5px 0 0;
         &:hover{
-          // opacity: 0.5;
           cursor: pointer;
         }
     }
@@ -137,17 +135,30 @@ main{
     padding: 20px;
     border-bottom: 1px solid #555;
     margin: 15px auto;
-      &:last-child{
-        border-bottom: none;
-      }
       .MainIconBox{
         height: 60px;
         width: 60px;
-        margin: 0 50px 0 0;
+        margin: 0 30px 0 0;
             .MinIcon{
               width: 100%;
               border-radius: 50%;
               border: 1px solid #ccc;
+            }
+            .NameBox{
+              padding: 1px 5px;
+              margin: 10px 0 0;
+              border-radius: 3px;
+              background-color:#ccc;
+              &:before{
+                font-family: "Font Awesome 5 Free";
+                content:"\f007";
+                font-weight: 900;
+                color:$sub_color1;
+              }
+              a{
+                font-size: 14px;
+                color:$sub_color1;
+              }
             }
       }
       .MainAuthorPostBox{
@@ -155,22 +166,7 @@ main{
         .MainAuthorName{
           display: flex;
           width: 650px;
-          padding: 0 0 15px 0;
-          .NameBox{
-            padding: 1px 5px;
-            border-radius: 3px;
-            background-color:#ccc;
-            &:before{
-              font-family: "Font Awesome 5 Free";
-              content:"\f007";
-              font-weight: 900;
-              color:$sub_color1;
-            }
-            a{
-              font-size: 14px;
-              color:$sub_color1;
-            }
-          }
+          padding: 0 0 5px 0;
           .TimeBox{
             margin-left: auto;
              time{
@@ -184,15 +180,37 @@ main{
              }
           }
         }
+        .MainPostBox{
+          padding: 0 10px 10px;
+        }
         .MainPostImageBox{
           text-align: left;
-          margin: 20px 0;
+          margin: 10px 10px 20px;
+          position: relative;
+          display: inline-block;
+            .ImageCover{
+              display: flex;
+              justify-content: center;
+              align-items: center;
+              position: absolute;
+              top: 0;
+              left: 0;
+              background-color:	rgba(0,0,0,0.4);
+              width: 100%;
+              height: 100%;
+              opacity: 0;
+              border-radius: 5px;
+                &:hover{
+                  opacity: 1;
+                }
+                .caption{
+                  color: #fff;
+                  font-size: 1.5rem;
+                }
+            }
             .MainPostImage{
               border-radius: 5px;
               border: 2px solid $sub_color1;
-                &:hover{
-                  opacity: 0.5;
-                }
             }
         }
         .TinkerBox{
@@ -274,6 +292,12 @@ main{
       border-radius: 3px;
       background-color: $common_color5;
       display: none;
+      .DeleteBox{
+        text-align: right;
+          #delete{
+            cursor: pointer;
+          }
+      }
     }
   }
 }
@@ -284,9 +308,6 @@ main{
     a{
       text-decoration: none;
       color:$sub_color1;
-        &:hover{
-          opacity:0.5;
-        }
     }
   }
 

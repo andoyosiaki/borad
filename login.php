@@ -5,33 +5,31 @@ require "function/functions.php";
 ini_set('display_errors',1);
 
 
+$errors['errors'] = NULL;
+//$_POSTの情報がdbにあったら$_SESSIONにデータ挿入
+if(!empty($_POST)){
+  if(!$_POST['name'] !=='' && !$_POST['password'] !=='' ){
+    $statment = $db->prepare('SELECT * FROM userinfo WHERE name=? AND password=?');
+    $statment->execute(array(
+      $_POST['name'],
+      sha1($_POST['password'])
+    ));
+    $rec = $statment->fetch();
 
-// if(!$_SESSION){
-  $errors['errors'] = NULL;
-  //$_POSTの情報がdbにあったら$_SESSIONにデータ挿入
-  if(!empty($_POST)){
-    if(!$_POST['name'] !=='' && !$_POST['password'] !=='' ){
-      $statment = $db->prepare('SELECT * FROM userinfo WHERE name=? AND password=?');
-      $statment->execute(array(
-        $_POST['name'],
-        sha1($_POST['password'])
-      ));
-      $rec = $statment->fetch();
-
-      if($rec){
-        $_SESSION['id'] = $rec['user_id'];
-        $_SESSION['name'] = $rec['name'];
-        $_SESSION['icon'] = $rec['icon'];
-        $_SESSION['time'] = time();
-        header('Location:index.php');exit();
-        echo "成功";
-      }else {
-          $errors['errors'] = 'miss1';
-      }
+    if($rec){
+      $_SESSION['id'] = $rec['user_id'];
+      $_SESSION['name'] = $rec['name'];
+      $_SESSION['icon'] = $rec['icon'];
+      $_SESSION['time'] = time();
+      header('Location:index.php');exit();
+      echo "成功";
     }else {
-        $errors['errors'] = 'miss2';
+        $errors['errors'] = 'miss1';
     }
+  }else {
+      $errors['errors'] = 'miss2';
   }
+}
 
 
 ?>

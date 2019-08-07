@@ -33,7 +33,7 @@ ini_set('display_errors',1);
         }
     </style>
     <div class="img_box">
-      <img src="images/Reply_Proto_img/<?php echo h($image['reply_img']); ?>" alt="">
+      <img src="<?php echo IMAGES_DIR.R_PROTO_IMG ?><?php echo h($image['reply_img']); ?>" alt="">
     </div>
   </body>
 </html>

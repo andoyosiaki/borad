@@ -12,7 +12,6 @@ ini_set('display_errors',1);
   ));
   $image= $statment->fetch();
 
-
  ?>
 <!DOCTYPE html>
 <html lang="ja" dir="ltr">
@@ -33,7 +32,7 @@ ini_set('display_errors',1);
         }
     </style>
     <div class="img_box">
-      <img src="images/Proto_img/<?php echo h($image['tweet_img']); ?>" alt="">
+      <img src="<?php echo IMAGES_DIR.PROTO_IMG ?><?php echo h($image['tweet_img']); ?>" alt="">
     </div>
   </body>
 </html>

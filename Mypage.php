@@ -26,7 +26,6 @@ if(isset($_SESSION['id'])){
 }
 
  ?>
-
 <?php require_once('./head.php'); ?>
 
 <!-- ProfileSection -->
@@ -36,9 +35,9 @@ if(isset($_SESSION['id'])){
             <div class="ProfileInnerBox">
               <div class="UserIconBox">
                 <?php if($rec['icon'] === null): ?>
-                <p class="m-1"><img src="images/Profile_Compre_img/0.png" class="UserIcon"></p>
+                <p class="m-1"><img src="<?php echo IMAGES_DIR.P_COMPRE_IMG ?>.'0.png'" class="UserIcon"></p>
                 <?php else: ?>
-                <p class="m-1"><img src="images/Profile_Compre_img/<?php echo $rec['icon']; ?>" class="UserIcon"></p>
+                <p class="m-1"><img src="<?php echo IMAGES_DIR.P_COMPRE_IMG ?><?php echo $rec['icon']; ?>" class="UserIcon"></p>
                 <?php endif; ?>
                 <p class="UserName"><?php echo $rec['name']; ?></p>
               </div>
@@ -63,7 +62,9 @@ if(isset($_SESSION['id'])){
                 </div>
                 <button type="submit" class="btn btn-lg FormBtn">　送　信　</button>
               </form>
-              <p id="delete">退会する</p>
+              <div class="DeleteBox">
+                <a  id="delete">退会する</a>
+              </div>
             </div>
           </div>
           <script>
@@ -85,14 +86,14 @@ if(isset($_SESSION['id'])){
   <article class="MainArticle">
     <div class="MainIconBox">
       <a href="Mypage.php?page=<?php echo  $rec['user_id']; ?>">
-        <img src="images/Profile_Compre_img/<?php echo $rec['icon']; ?>" alt="" class="MinIcon">
+        <img src="<?php echo IMAGES_DIR.P_COMPRE_IMG ?><?php echo $rec['icon']; ?>" alt="" class="MinIcon">
       </a>
+      <div class="NameBox">
+        <a href="Mypage.php?page=<?php echo  $rec['user_id']; ?>"><?php echo h($rec['name']); ?></a>
+      </div>
     </div>
     <div class="MainAuthorPostBox">
       <div class="MainAuthorName">
-        <div class="NameBox">
-          <a href="Mypage.php?page=<?php echo  $rec['user_id']; ?>"><?php echo h($rec['name']); ?></a>
-        </div>
         <div class="TimeBox">
           <time><?php echo times($rec['create_at']); ?></time>
         </div>
@@ -100,11 +101,15 @@ if(isset($_SESSION['id'])){
       <div class="MainPostBox">
         <p><?php echo newline($rec['content']); ?></p>
       </div>
-      <div class="MainPostImageBox">
-        <?php if($rec['tweet_img']): ?>
-        <a href="Detail_Image.php?item=<?php echo $rec['tweets_id']; ?>"><img src="images/Compre_img/<?php echo $rec['tweet_img']; ?>" class="MainPostImage"></a>
-        <?php endif; ?>
-      </div>
+      <?php if($rec['tweet_img']): ?>
+        <div class="MainPostImageBox">
+          <object><a href="Detail_Image.php?item=<?php echo $rec['tweets_id']; ?>"><img src="<?php echo IMAGES_DIR.COMPRE_IMG ?><?php echo $rec['tweet_img']; ?>" class="MainPostImage">
+          <div class="ImageCover">
+            <div class="caption">Click</div>
+          </div>
+          </a></object>
+        </div>
+      <?php endif; ?>
       <div class="TinkerBox">
         <div class="ReplyIconBox">
           <a href="Reply_Posts.php?page=<?php echo $rec['tweets_id'] ;  ?>"><i class="far fa-comment fa-lg "></i></a>

@@ -14,8 +14,8 @@ if(isset($_FILES['image']['name'])){
   $statment->execute(array($_SESSION['id']));
   $user = $statment->fetch();
   if(isset($user['icon']) && $user['icon'] !=='0.png'){
-  $file = 'images/Profile_Compre_img/'.$user['icon'];
-  $files = 'images/Profile_Proto_img/'.$user['icon'];
+  $file = IMAGES_DIR.P_COMPRE_IMG.$user['icon'];
+  $files = IMAGES_DIR.P_PROTO_IMG.$user['icon'];
   }
   if(isset($file) && isset($files)){
     unlink($file);
@@ -27,17 +27,17 @@ if(isset($_FILES['image']['name'])){
   if($ext === '.jpg' || $ext === '.png' && $img_error === 0){
     $day = time();
     $img_adress =  $day.$_SESSION['id'].$ext;
-    move_uploaded_file($_FILES['image']['tmp_name'],'images/Profile_Proto_img/'."$img_adress");
+    move_uploaded_file($_FILES['image']['tmp_name'],IMAGES_DIR.P_PROTO_IMG.$img_adress);
 
-    // $info = substr('images/Profile_Proto_img/'."$img_adress",-4);
-    list($width, $hight,$info) = getimagesize('images/Profile_Proto_img/'."$img_adress"); // 元の画像名を指定してサイズを取得
+
+    list($width, $hight,$info) = getimagesize(IMAGES_DIR.P_PROTO_IMG.$img_adress); // 元の画像名を指定してサイズを取得
 
     switch($info){
     case 2:
-    $baseImage = imagecreatefromjpeg("images/Profile_Proto_img/"."$img_adress");
+    $baseImage = imagecreatefromjpeg(IMAGES_DIR.P_PROTO_IMG.$img_adress);
     break;
     case 3:
-    $baseImage = imagecreatefrompng("images/Profile_Proto_img/"."$img_adress");
+    $baseImage = imagecreatefrompng(IMAGES_DIR.P_PROTO_IMG.$img_adress);
     break;
     }
 
@@ -45,7 +45,7 @@ if(isset($_FILES['image']['name'])){
 
     // 画像のコピーと伸縮
     imagecopyresampled($image, $baseImage, 0, 0, 0, 0, 100, 100, $width, $hight);
-    imagejpeg($image , 'images/Profile_Compre_img/'."$img_adress");
+    imagejpeg($image,IMAGES_DIR.P_COMPRE_IMG.$img_adress);
   }elseif($_POST['hidden_img']) {
     $img_adress = $_POST['hidden_img'];
   }else {

@@ -3,11 +3,9 @@ session_start();
 require_once(__DIR__.'/core/dbconect.php');
 require "function/functions.php";
 
-define('MAX_FILE_SIZE', 4 * 1024 * 1024); // 1MB
 ini_set('display_errors',1);
 
-$statment = $db->query('SELECT * FROM tweets INNER JOIN userinfo on userinfo.user_id=tweets.author_id order by tweets.tweets_id DESC');
-
+$statment = $db->query('SELECT * FROM tweets INNER JOIN userinfo on userinfo.user_id=tweets.author_id order by tweets.create_at DESC');
 
  ?>
 
@@ -44,16 +42,16 @@ $statment = $db->query('SELECT * FROM tweets INNER JOIN userinfo on userinfo.use
     <?php while($rec = $statment->fetch()): ?>
     <article class="MainArticle">
       <div class="MainIconBox">
-        <object><a href="Mypage.php?page=<?php echo  $rec['user_id']; ?>">
-          <img src="images/Profile_Compre_img/<?php echo $rec['icon']; ?>" alt="" class="MinIcon">
+        <object><a href="Mypage.php?page=<?php echo $rec['user_id']; ?>">
+          <img src="<?php echo IMAGES_DIR.P_COMPRE_IMG ?><?php echo $rec['icon']; ?>" alt="" class="MinIcon">
         </object></a>
+        <div class="NameBox">
+          <object><a href="Mypage.php?page=<?php echo $rec['user_id']; ?>"><?php echo h($rec['name']); ?></a></object>
+        </div>
       </div>
       <div class="MainAuthorPostBox">
         <a href="Reply_Posts.php?page=<?php echo $rec['tweets_id'] ;  ?>">
           <div class="MainAuthorName">
-            <div class="NameBox">
-              <object><a href="Mypage.php?page=<?php echo  $rec['user_id']; ?>"><?php echo h($rec['name']); ?></a></object>
-            </div>
             <div class="TimeBox">
               <time><?php echo times($rec['created']); ?></time>
             </div>
@@ -61,13 +59,15 @@ $statment = $db->query('SELECT * FROM tweets INNER JOIN userinfo on userinfo.use
           <div class="MainPostBox">
             <p><?php echo newline($rec['content']); ?></p>
           </div>
-          <div class="MainPostImageBox">
-            <?php if($rec['tweet_img']): ?>
-            <object><a href="Detail_Image.php?item=<?php echo $rec['tweets_id']; ?>"><img src="images/Compre_img/<?php echo $rec['tweet_img']; ?>" class="MainPostImage"></a></object>
-            <?php else: ?>
-            <p></p>
-            <?php endif; ?>
-          </div>
+          <?php if($rec['tweet_img']): ?>
+            <div class="MainPostImageBox">
+              <object><a href="Detail_Image.php?item=<?php echo $rec['tweets_id']; ?>"><img src="<?php echo IMAGES_DIR.COMPRE_IMG ?><?php echo $rec['tweet_img']; ?>" class="MainPostImage">
+              <div class="ImageCover">
+                <div class="caption">Click</div>
+              </div>
+              </a></object>
+            </div>
+          <?php endif; ?>
         </a>
         <div class="TinkerBox">
           <div class="ReplyIconBox">

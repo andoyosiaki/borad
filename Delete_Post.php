@@ -16,12 +16,30 @@ if(isset($_REQUEST['page'])){
     }else {
       header('Location:index.php');exit();
     }
-      //画像ファイルの削除
+      //投稿画像ファイルの削除
     if(isset($user['tweet_img']) && $user['tweet_img'] !==0){
-      $file = 'images/Proto_img/'.$user['tweet_img'];
-      $files = 'images/Compre_img/'.$user['tweet_img'];
+      $file = IMAGES_DIR.PROTO_IMG.$user['tweet_img'];
+      $files = IMAGES_DIR.COMPRE_IMG.$user['tweet_img'];
       unlink($file);
       unlink($files);
+    }
+
+      //投稿画像に付いた返信に画像付きの返信があったら一緒に全て削除
+    if(isset($user['maxpost']) && $user['maxpost'] !==0 ){
+      $statment = $db->prepare('SELECT * FROM replay_posts WHERE reply_id=?');
+      $statment->execute(array($user['tweets_id']));
+      $users = $statment->fetch();
+
+      if(isset($users['reply_img']) && $users['reply_img'] !==null){
+        $file1 = IMAGES_DIR.R_COMPRE_IMG.$users['reply_author_name'];
+        $file2 = IMAGES_DIR.R_PROTO_IMG.$users['reply_author_name'];
+        foreach(glob(IMAGES_DIR.R_COMPRE_IMG.$users['reply_author_name'].'*') as $file1){
+          unlink($file1);
+        }
+        foreach(glob(IMAGES_DIR.R_PROTO_IMG.$users['reply_author_name'].'*') as $file2){
+          unlink($file2);
+        }
+      }
     }
 
     if($_SESSION['id'] === $user['author_id']){
@@ -53,16 +71,16 @@ if(isset($_REQUEST['Reply'])){
       $statment->execute(array($reply));
       $user = $statment->fetch();
     }else {
-      header('Location:index.php');exit();
+      // header('Location:index.php');exit();
     }
 
-    //画像ファイルの削除
-  if(isset($user['reply_img']) && $user['reply_img'] !==null){
-    $file = 'images/Reply_Proto_img/'.$user['reply_img'];
-    $files = 'images/Reply_Compre_img/'.$user['reply_img'];
-    unlink($file);
-    unlink($files);
-  }
+      //画像ファイルの削除
+    if(isset($user['reply_img']) && $user['reply_img'] !==null){
+      $file = IMAGES_DIR.R_PROTO_IMG.$user['reply_img'];
+      $files = IMAGES_DIR.R_COMPRE_IMG.$user['reply_img'];
+      unlink($file);
+      unlink($files);
+    }
 
     if($_SESSION['id']===$user['reply_author_id']){
       if($reply === $user['reply_co_id']){
@@ -77,10 +95,7 @@ if(isset($_REQUEST['Reply'])){
         ));
         $maxpost = $max->fetch();
 
-        if($maxpost['cnt'] === 0){
-          $maxpost = null;
-        }
-        if($maxpost['cnt'] || $maxpost){
+        if($maxpost['cnt'] !==1){
           $max = $db->prepare('UPDATE tweets SET maxpost=? WHERE tweets_id=?');
           $max->execute(array(
             $maxpost['cnt'],
@@ -104,37 +119,38 @@ if(isset($_REQUEST['acount'])){
     $statment->execute(array($acount));
     $user = $statment->fetch();
     var_dump($user['name']);
+
       // アイコンの削除処理
     if(isset($user['icon']) && $user['icon'] !=='0.png'){
       if($user['icon'] !=='0.png'){
-        $file = 'images/Profile_Proto_img/'.$user['icon'];
+        $file = IMAGES_DIR.P_PROTO_IMG.$user['icon'];
       }
-      $files = 'images/Profile_Compre_img/'.$user['icon'];
+      $files = IMAGES_DIR.P_COMPRE_IMG.$user['icon'];
       if(isset($files) && isset($file)){
         unlink($file);
         unlink($files);
       }
     }
-    var_dump($user['name']);
-    echo  $file1 = 'images/Compre_img/'.$user['name'];
-    echo   $file2 = 'images/Proto_img/'.$user['name'];
-    echo   $file3 = 'images/Reply_Compre_img/'.$user['name'];
-    echo   $file4 = 'images/Reply_Proto_img/'.$user['name'];
-      foreach(glob('images/Compre_img/'.$user['name'].'*') as $file1){
+
+    //退会ユーザーが投稿した全ての画像ファイルの削除
+    $file1 = IMAGES_DIR.COMPRE_IMG.$user['name'];
+    $file2 = IMAGES_DIR.PROTO_IMG.$user['name'];
+    $file3 = IMAGES_DIR.R_COMPRE_IMG.$user['name'];
+    $file4 = IMAGES_DIR.R_PROTO_IMG.$user['name'];
+    foreach(glob(IMAGES_DIR.COMPRE_IMG.$user['name'].'*') as $file1){
       unlink($file1);
-      }
-      foreach(glob('images/Proto_img/'.$user['name'].'*') as $file2){
+    }
+    foreach(glob(IMAGES_DIR.PROTO_IMG.$user['name'].'*') as $file2){
       unlink($file2);
-
-      }
-      foreach(glob('images/Reply_Compre_img/'.$user['name'].'*') as $file3){
+    }
+    foreach(glob(IMAGES_DIR.R_COMPRE_IMG.$user['name'].'*') as $file3){
       unlink($file3);
-      }
-      foreach(glob('images/Reply_Proto_img/'.$user['name'].'*') as $file4){
+    }
+    foreach(glob(IMAGES_DIR.R_PROTO_IMG.$user['name'].'*') as $file4){
       unlink($file4);
-      }
+    }
 
-
+    //dbからユーザー情報の削除
     if($acount){
       $delete = $db->prepare('DELETE  FROM userinfo where user_id=?'); //ユーザー情報を削除
       $delete->execute(array($acount));

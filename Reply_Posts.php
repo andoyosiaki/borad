@@ -1,10 +1,10 @@
 <?php
 session_start();
 require_once(__DIR__.'/core/dbconect.php');
-require(__DIR__.'/function/functions.php');
+require "function/functions.php";
 ini_set('display_errors',1);
 
-define('MAX_FILE_SIZE', 4 * 1024 * 1024); // 1MB
+
 
 
   $statment = $db->prepare('SELECT * FROM userinfo INNER JOIN tweets on userinfo.user_id=tweets.author_id WHERE tweets.tweets_id=?');
@@ -27,14 +27,14 @@ define('MAX_FILE_SIZE', 4 * 1024 * 1024); // 1MB
     <article class="MainArticle">
       <div class="MainIconBox">
         <a href="Mypage.php?page=<?php echo  $rec['user_id']; ?>">
-          <img src="images/Profile_Compre_img/<?php echo $rec['icon']; ?>" alt="" class="MinIcon">
+          <img src="<?php echo IMAGES_DIR.P_COMPRE_IMG ?><?php echo $rec['icon']; ?>" alt="" class="MinIcon">
         </a>
+        <div class="NameBox">
+          <a href="Mypage.php?page=<?php echo $rec['user_id']; ?>"><?php echo h($rec['name']); ?></a>
+        </div>
       </div>
       <div class="MainAuthorPostBox">
         <div class="MainAuthorName">
-          <div class="NameBox">
-            <a href="Mypage.php?page=<?php echo $rec['user_id']; ?>"><?php echo h($rec['name']); ?></a>
-          </div>
           <div class="TimeBox">
             <time><?php echo times($rec['created']); ?></time>
           </div>
@@ -42,13 +42,15 @@ define('MAX_FILE_SIZE', 4 * 1024 * 1024); // 1MB
         <div class="MainPostBox">
           <p><?php echo newline($rec['content']); ?></p>
         </div>
+        <?php if($rec['tweet_img']): ?>
         <div class="MainPostImageBox">
-          <?php if($rec['tweet_img']): ?>
-          <a href="Detail_Image.php?item=<?php echo $rec['tweets_id']; ?>"><img src="images/Compre_img/<?php echo $rec['tweet_img']; ?>" class="MainPostImage"></a>
-          <?php else: ?>
-          <p></p>
-          <?php endif; ?>
+          <object><a href="Detail_Image.php?item=<?php echo $rec['tweets_id']; ?>"><img src="<?php echo IMAGES_DIR.COMPRE_IMG ?><?php echo $rec['tweet_img']; ?>" class="MainPostImage">
+          <div class="ImageCover">
+            <div class="caption">Click</div>
+          </div>
+          </a></object>
         </div>
+        <?php endif; ?>
       </div>
     </article>
   </main>
@@ -61,12 +63,12 @@ define('MAX_FILE_SIZE', 4 * 1024 * 1024); // 1MB
         <a href="Mypage.php?page=<?php echo  $recs['reply_author_id']; ?>">
           <img src="images/Profile_Compre_img/<?php echo $recs['icon']; ?>" alt="" class="MinIcon">
         </a>
+        <div class="NameBox">
+          <a href="Mypage.php?page=<?php echo  $recs['reply_author_id']; ?>"><?php echo h($recs['reply_author_name']); ?></a>
+        </div>
       </div>
       <div class="MainAuthorPostBox">
         <div class="MainAuthorName">
-          <div class="NameBox">
-            <a href="Mypage.php?page=<?php echo  $recs['reply_author_id']; ?>"><?php echo h($recs['reply_author_name']); ?></a>
-          </div>
           <div class="TimeBox">
             <time><?php echo times($recs['re_create_at']); ?></time>
           </div>
@@ -74,14 +76,15 @@ define('MAX_FILE_SIZE', 4 * 1024 * 1024); // 1MB
         <div class="MainPostBox">
           <p><?php  $text = h($recs['reply_content']); echo nl2br($text);?></p>
         </div>
+        <?php if($recs['reply_img']): ?>
         <div class="MainPostImageBox">
-
-          <?php if($recs['reply_img']): ?>
-          <a href="Reply_Detail_Image.php?page=<?php echo $recs['reply_img']; ?>"><img src="images/Reply_Compre_img/<?php echo $recs['reply_img']; ?>" class="MainPostImage"></a>
-          <?php else: ?>
-          <p></p>
-          <?php endif; ?>
+          <object><a href="Reply_Detail_Image.php?page=<?php echo $recs['reply_img']; ?>"><img src="images/Reply_Compre_img/<?php echo $recs['reply_img']; ?>" class="MainPostImage">
+          <div class="ImageCover">
+            <div class="caption">Click</div>
+          </div>
+          </a></object>
         </div>
+        <?php endif; ?>
         <div class="TinkerBox">
           <?php if(isset($_SESSION['id'])  && $_SESSION['id'] === $recs['reply_author_id']): ?>
           <div class="DeleteIconBox">

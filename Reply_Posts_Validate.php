@@ -1,28 +1,31 @@
 <?php
 session_start();
 require_once(__DIR__.'/core/dbconect.php');
+require "function/functions.php";
 ini_set('display_errors',1);
-
-define('MAX_FILE_SIZE', 4 * 1024 * 1024); // 1MB
-
 
 //画像のバリデーションと保存処理とサイズの加工処理
 if(isset($_SESSION['id'])){
   if(isset($_FILES['image']['name']) && $_SERVER['REQUEST_METHOD'] === 'POST'){
     $ext = substr($_FILES['image']['name'],-4);
     if($ext === '.jpg' || $ext === '.png'){
+      $statment = $db->prepare('SELECT uniq_id FROM tweets WHERE tweets_id=?');
+      $statment->execute(array($_POST['reply_id']));
+      $uniq_id = $statment->fetch();
+
+      $uniq = $uniq_id['uniq_id'];
       $day = time();
-      $img_adress =  $_POST['reply_author_name'].$day.$_SESSION['id'].$ext;
-      move_uploaded_file($_FILES['image']['tmp_name'],'images/Reply_Proto_img/'."$img_adress");
+      $img_adress =  $_SESSION['name'].$uniq.$day.$_SESSION['id'].$ext;
+      move_uploaded_file($_FILES['image']['tmp_name'],IMAGES_DIR.R_PROTO_IMG.$img_adress);
 
 
-      list($width, $hight,$info) = getimagesize('images/Reply_Proto_img/'."$img_adress"); // 元の画像名を指定してサイズを取得
+      list($width, $hight,$info) = getimagesize(IMAGES_DIR.R_PROTO_IMG.$img_adress); // 元の画像名を指定してサイズを取得
       switch($info){
       case 2:
-      $baseImage = imagecreatefromjpeg("images/Reply_Proto_img/"."$img_adress");
+      $baseImage = imagecreatefromjpeg(IMAGES_DIR.R_PROTO_IMG.$img_adress);
       break;
       case 3:
-      $baseImage = imagecreatefrompng("images/Reply_Proto_img/"."$img_adress");
+      $baseImage = imagecreatefrompng(IMAGES_DIR.R_PROTO_IMG.$img_adress);
       break;
       }
 
@@ -30,7 +33,7 @@ if(isset($_SESSION['id'])){
 
       if(isset($baseImage)){
         imagecopyresampled($image, $baseImage, 0, 0, 0, 0, 200, 140, $width, $hight);
-        imagejpeg($image , 'images/Reply_Compre_img/'."$img_adress");
+        imagejpeg($image,IMAGES_DIR.R_COMPRE_IMG.$img_adress);
       }else {
         header('Location:Reply_Posts.php?page='.$_POST['reply_id']);exit();
       }
