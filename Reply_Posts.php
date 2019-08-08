@@ -29,12 +29,12 @@ ini_set('display_errors',1);
         <a href="Mypage.php?page=<?php echo  $rec['user_id']; ?>">
           <img src="<?php echo IMAGES_DIR.P_COMPRE_IMG ?><?php echo $rec['icon']; ?>" alt="" class="MinIcon">
         </a>
-        <div class="NameBox">
-          <a href="Mypage.php?page=<?php echo $rec['user_id']; ?>"><?php echo h($rec['name']); ?></a>
-        </div>
       </div>
       <div class="MainAuthorPostBox">
         <div class="MainAuthorName">
+          <div class="NameBox">
+            <a href="Mypage.php?page=<?php echo $rec['user_id']; ?>"><?php echo h($rec['name']); ?></a>
+          </div>
           <div class="TimeBox">
             <time><?php echo times($rec['created']); ?></time>
           </div>
@@ -63,12 +63,12 @@ ini_set('display_errors',1);
         <a href="Mypage.php?page=<?php echo  $recs['reply_author_id']; ?>">
           <img src="images/Profile_Compre_img/<?php echo $recs['icon']; ?>" alt="" class="MinIcon">
         </a>
-        <div class="NameBox">
-          <a href="Mypage.php?page=<?php echo  $recs['reply_author_id']; ?>"><?php echo h($recs['reply_author_name']); ?></a>
-        </div>
       </div>
       <div class="MainAuthorPostBox">
         <div class="MainAuthorName">
+          <div class="NameBox">
+            <a href="Mypage.php?page=<?php echo  $recs['reply_author_id']; ?>"><?php echo h($recs['reply_author_name']); ?></a>
+          </div>
           <div class="TimeBox">
             <time><?php echo times($recs['re_create_at']); ?></time>
           </div>

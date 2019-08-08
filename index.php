@@ -45,13 +45,13 @@ $statment = $db->query('SELECT * FROM tweets INNER JOIN userinfo on userinfo.use
         <object><a href="Mypage.php?page=<?php echo $rec['user_id']; ?>">
           <img src="<?php echo IMAGES_DIR.P_COMPRE_IMG ?><?php echo $rec['icon']; ?>" alt="" class="MinIcon">
         </object></a>
-        <div class="NameBox">
-          <object><a href="Mypage.php?page=<?php echo $rec['user_id']; ?>"><?php echo h($rec['name']); ?></a></object>
-        </div>
       </div>
       <div class="MainAuthorPostBox">
         <a href="Reply_Posts.php?page=<?php echo $rec['tweets_id'] ;  ?>">
           <div class="MainAuthorName">
+            <div class="NameBox">
+              <object><a href="Mypage.php?page=<?php echo $rec['user_id']; ?>"><?php echo h($rec['name']); ?></a></object>
+            </div>
             <div class="TimeBox">
               <time><?php echo times($rec['created']); ?></time>
             </div>

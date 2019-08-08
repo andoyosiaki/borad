@@ -160,30 +160,31 @@ if(isset($_REQUEST['acount'])){
         $statmentt = $db->prepare('SELECT DISTINCT reply_id FROM replay_posts WHERE reply_author_id=?'); //退会処理をする前に退会ユーザーのidを使って、どこの投稿に返信しているか確認
         $statmentt->execute(array($acount));
 
+        $delete = $db->prepare('DELETE  FROM userinfo where user_id=?'); //ユーザー情報を削除
+        $delete->execute(array($acount));
+
+        $deletea = $db->prepare('DELETE  FROM tweets where author_id=?'); //ツイートを投稿していたら全て削除。ツイートしてなかったら何も処理しない。
+          if(!empty($deletea)){
+            $deletea->execute(array($acount));
+          }
+
+        $deleteb = $db->prepare('DELETE  FROM replay_posts where reply_author_id=?'); //返信ツイートをしていたら削除
+        $deleteb->execute(array($acount));
+
         while ($userrr = $statmentt->fetch()) {
-          $delete = $db->prepare('DELETE  FROM userinfo where user_id=?'); //ユーザー情報を削除
-          $delete->execute(array($acount));
-
-          $deletea = $db->prepare('DELETE  FROM tweets where author_id=?'); //ツイートを投稿していたら全て削除。ツイートしてなかったら何も処理しない。
-            if(!empty($deletea)){
-              $deletea->execute(array($acount));
-            }
-
-          $deleteb = $db->prepare('DELETE  FROM replay_posts where reply_author_id=?'); //返信ツイートをしていたら削除
-          $deleteb->execute(array($acount));
-
-          $statmenttt = $db->prepare('SELECT DISTINCT reply_id FROM replay_posts WHERE reply_id=?'); //先に調べておいた返信先の投稿idを使って
+          $statmenttt = $db->prepare('SELECT DISTINCT reply_id FROM replay_posts WHERE reply_id=?'); //先に調べておいた返信先の投稿idをループで取得
           $statmenttt->execute(array($userrr['reply_id']));
 
           while ($userrrr = $statmenttt->fetch()) {
-             $deletee = $db->prepare('SELECT COUNT(*) as cnt FROM replay_posts WHERE reply_id=?');
+             $deletee = $db->prepare('SELECT COUNT(*) as cnt FROM replay_posts WHERE reply_id=?'); //返信数を取得
              $deletee->execute(array($userrrr['reply_id']));
              $maxx = $deletee->fetch();
-             $update = $db->prepare('UPDATE tweets SET maxpost=? WHERE tweets_id=?');
+             $update = $db->prepare('UPDATE tweets SET maxpost=? WHERE tweets_id=?'); //返信が削除された後の返信数を使って更新させる。
              $update->execute(array($maxx['cnt'],$userrrr['reply_id']));
           }
         }
-      }elseif($done['reply_id'] === null) {
+        
+      }elseif($done['reply_id'] === null) { //退会ユーザーが何も投稿も返信もしていない場合の処理
 
         $delete = $db->prepare('DELETE  FROM userinfo where user_id=?'); //ユーザー情報を削除
         $delete->execute(array($acount));
@@ -197,7 +198,7 @@ if(isset($_REQUEST['acount'])){
         $deleteb->execute(array($acount));
       }
     }
-    // session_destroy();
-    // header('Location:index.php');exit();
+    session_destroy();
+    header('Location:index.php');exit();
   }
 }

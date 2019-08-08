@@ -88,12 +88,12 @@ if(isset($_SESSION['id'])){
       <a href="Mypage.php?page=<?php echo  $rec['user_id']; ?>">
         <img src="<?php echo IMAGES_DIR.P_COMPRE_IMG ?><?php echo $rec['icon']; ?>" alt="" class="MinIcon">
       </a>
-      <div class="NameBox">
-        <a href="Mypage.php?page=<?php echo  $rec['user_id']; ?>"><?php echo h($rec['name']); ?></a>
-      </div>
     </div>
     <div class="MainAuthorPostBox">
       <div class="MainAuthorName">
+        <div class="NameBox">
+          <a href="Mypage.php?page=<?php echo  $rec['user_id']; ?>"><?php echo h($rec['name']); ?></a>
+        </div>
         <div class="TimeBox">
           <time><?php echo times($rec['create_at']); ?></time>
         </div>

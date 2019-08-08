@@ -135,27 +135,12 @@ main .MainArticle .MainIconBox .MinIcon {
   border-radius: 50%;
   border: 1px solid #ccc;
 }
-main .MainArticle .MainIconBox .NameBox {
-  padding: 1px 5px;
-  margin: 10px 0 0;
-  border-radius: 3px;
-  background-color: #ccc;
-}
-main .MainArticle .MainIconBox .NameBox:before {
-  font-family: "Font Awesome 5 Free";
-  content: "\f007";
-  font-weight: 900;
-  color: #555;
-}
-main .MainArticle .MainIconBox .NameBox a {
-  font-size: 14px;
-  color: #555;
-}
 main .MainArticle .MainAuthorPostBox {
   width: 700px;
 }
 main .MainArticle .MainAuthorPostBox .MainAuthorName {
   display: flex;
+  align-items: center;
   width: 650px;
   padding: 0 0 5px 0;
 }
@@ -171,12 +156,27 @@ main .MainArticle .MainAuthorPostBox .MainAuthorName .TimeBox time:before {
   font-weight: 900;
   margin-right: 5px;
 }
+main .MainArticle .MainAuthorPostBox .MainAuthorName .NameBox {
+  padding: 1px 5px;
+  border-radius: 3px;
+  background-color: #ccc;
+}
+main .MainArticle .MainAuthorPostBox .MainAuthorName .NameBox:before {
+  font-family: "Font Awesome 5 Free";
+  content: "\f007";
+  font-weight: 900;
+  color: #555;
+}
+main .MainArticle .MainAuthorPostBox .MainAuthorName .NameBox a {
+  font-size: 14px;
+  color: #555;
+}
 main .MainArticle .MainAuthorPostBox .MainPostBox {
-  padding: 0 10px 10px;
+  padding: 10px 0;
 }
 main .MainArticle .MainAuthorPostBox .MainPostImageBox {
   text-align: left;
-  margin: 10px 10px 20px;
+  margin: 10px 0;
   position: relative;
   display: inline-block;
 }
