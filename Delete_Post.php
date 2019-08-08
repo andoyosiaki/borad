@@ -10,8 +10,8 @@ if(isset($_REQUEST['page'])){
   $page = $_REQUEST['page'];
   if($page){
     if(isset($_SESSION['id'])){
-      $statment = $db->prepare('SELECT * FROM tweets WHERE author_id=?');
-      $statment->execute(array($_SESSION['id']));
+      $statment = $db->prepare('SELECT * FROM tweets WHERE tweets_id=?');
+      $statment->execute(array($page));
       $user = $statment->fetch();
     }else {
       header('Location:index.php');exit();
@@ -25,18 +25,18 @@ if(isset($_REQUEST['page'])){
     }
 
       //投稿画像に付いた返信に画像付きの返信があったら一緒に全て削除
-    if(isset($user['maxpost']) && $user['maxpost'] !==0 ){
+    if(isset($user['maxpost']) && $user['maxpost'] !==0){
       $statment = $db->prepare('SELECT * FROM replay_posts WHERE reply_id=?');
       $statment->execute(array($user['tweets_id']));
       $users = $statment->fetch();
 
       if(isset($users['reply_img']) && $users['reply_img'] !==null){
-        $file1 = IMAGES_DIR.R_COMPRE_IMG.$users['reply_author_name'];
-        $file2 = IMAGES_DIR.R_PROTO_IMG.$users['reply_author_name'];
-        foreach(glob(IMAGES_DIR.R_COMPRE_IMG.$users['reply_author_name'].'*') as $file1){
+        $file1 = IMAGES_DIR.R_COMPRE_IMG.$users['reply_author_name'].$user['uniq_id'];
+        $file2 = IMAGES_DIR.R_PROTO_IMG.$users['reply_author_name'].$user['uniq_id'];
+        foreach(glob(IMAGES_DIR.R_COMPRE_IMG.'*'.$user['uniq_id'].'*') as $file1){
           unlink($file1);
         }
-        foreach(glob(IMAGES_DIR.R_PROTO_IMG.$users['reply_author_name'].'*') as $file2){
+        foreach(glob(IMAGES_DIR.R_PROTO_IMG.'*'.$user['uniq_id'].'*') as $file2){
           unlink($file2);
         }
       }
@@ -71,7 +71,7 @@ if(isset($_REQUEST['Reply'])){
       $statment->execute(array($reply));
       $user = $statment->fetch();
     }else {
-      // header('Location:index.php');exit();
+      header('Location:index.php');exit();
     }
 
       //画像ファイルの削除
@@ -118,7 +118,6 @@ if(isset($_REQUEST['acount'])){
     $statment = $db->prepare('SELECT * FROM userinfo WHERE user_id=?');
     $statment->execute(array($acount));
     $user = $statment->fetch();
-    var_dump($user['name']);
 
       // アイコンの削除処理
     if(isset($user['icon']) && $user['icon'] !=='0.png'){
@@ -150,20 +149,55 @@ if(isset($_REQUEST['acount'])){
       unlink($file4);
     }
 
-    //dbからユーザー情報の削除
+    //dbからユーザー情報の削除と返信数の変更処理
     if($acount){
-      $delete = $db->prepare('DELETE  FROM userinfo where user_id=?'); //ユーザー情報を削除
-      $delete->execute(array($acount));
+      $base = $db->prepare('SELECT DISTINCT reply_id FROM replay_posts WHERE reply_author_id=?'); //退会処理を行う前に、ユーザーが投稿に対して返信をしているかを確認
+      $base->execute(array($acount));
+      $done = $base->fetch();
 
-      $deletea = $db->prepare('DELETE  FROM tweets where author_id=?'); //ツイートを投稿していたら全て削除。ツイートしてなかったら何も処理しない。
-        if(!empty($deletea)){
-          $deletea->execute(array($acount));
+      if(isset($done['reply_id']) && $done['reply_id'] !==null){ //投稿に対して返信をしているなら返信数も変更させる
+
+        $statmentt = $db->prepare('SELECT DISTINCT reply_id FROM replay_posts WHERE reply_author_id=?'); //退会処理をする前に退会ユーザーのidを使って、どこの投稿に返信しているか確認
+        $statmentt->execute(array($acount));
+
+        while ($userrr = $statmentt->fetch()) {
+          $delete = $db->prepare('DELETE  FROM userinfo where user_id=?'); //ユーザー情報を削除
+          $delete->execute(array($acount));
+
+          $deletea = $db->prepare('DELETE  FROM tweets where author_id=?'); //ツイートを投稿していたら全て削除。ツイートしてなかったら何も処理しない。
+            if(!empty($deletea)){
+              $deletea->execute(array($acount));
+            }
+
+          $deleteb = $db->prepare('DELETE  FROM replay_posts where reply_author_id=?'); //返信ツイートをしていたら削除
+          $deleteb->execute(array($acount));
+
+          $statmenttt = $db->prepare('SELECT DISTINCT reply_id FROM replay_posts WHERE reply_id=?'); //先に調べておいた返信先の投稿idを使って
+          $statmenttt->execute(array($userrr['reply_id']));
+
+          while ($userrrr = $statmenttt->fetch()) {
+             $deletee = $db->prepare('SELECT COUNT(*) as cnt FROM replay_posts WHERE reply_id=?');
+             $deletee->execute(array($userrrr['reply_id']));
+             $maxx = $deletee->fetch();
+             $update = $db->prepare('UPDATE tweets SET maxpost=? WHERE tweets_id=?');
+             $update->execute(array($maxx['cnt'],$userrrr['reply_id']));
+          }
         }
+      }elseif($done['reply_id'] === null) {
 
-      $deleteb = $db->prepare('DELETE  FROM replay_posts where reply_author_id=?'); //返信ツイートをしていたら削除
-      $deleteb->execute(array($acount));
+        $delete = $db->prepare('DELETE  FROM userinfo where user_id=?'); //ユーザー情報を削除
+        $delete->execute(array($acount));
+
+        $deletea = $db->prepare('DELETE  FROM tweets where author_id=?'); //ツイートを投稿していたら全て削除。ツイートしてなかったら何も処理しない。
+          if(!empty($deletea)){
+            $deletea->execute(array($acount));
+          }
+
+        $deleteb = $db->prepare('DELETE  FROM replay_posts where reply_author_id=?'); //返信ツイートをしていたら削除
+        $deleteb->execute(array($acount));
+      }
     }
-    session_destroy();
-    header('Location:index.php');exit();
+    // session_destroy();
+    // header('Location:index.php');exit();
   }
 }
