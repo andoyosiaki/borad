@@ -5,121 +5,105 @@ require "function/functions.php";
 
 ini_set('display_errors',1);
 
-  //メインページからの削除要請
-if(isset($_REQUEST['page'])){
-  $page = $_REQUEST['page'];
-  if($page){
-    if(isset($_SESSION['id'])){
-      $statment = $db->prepare('SELECT * FROM tweets WHERE tweets_id=?');
-      $statment->execute(array($page));
-      $user = $statment->fetch();
-    }else {
-      header('Location:index.php');exit();
-    }
-      //投稿画像ファイルの削除
-    if(isset($user['tweet_img']) && $user['tweet_img'] !==0){
-      $file = IMAGES_DIR.PROTO_IMG.$user['tweet_img'];
-      $files = IMAGES_DIR.COMPRE_IMG.$user['tweet_img'];
-      unlink($file);
-      unlink($files);
-    }
+/*
+ ①[投稿の削除]
+ ②[返信の削除]
+ ③[退会ユーザー情報の削除]
+ */
 
-      //投稿画像に付いた返信に画像付きの返信があったら一緒に全て削除
-    if(isset($user['maxpost']) && $user['maxpost'] !==0){
-      $statment = $db->prepare('SELECT * FROM replay_posts WHERE reply_id=?');
-      $statment->execute(array($user['tweets_id']));
-      $users = $statment->fetch();
+//①[投稿の削除] メインページ(index.php)からの削除要請
+if(isset($_REQUEST['from_main']) && isset($_SESSION['id'])){
+  $main = $_REQUEST['from_main'];
+  //削除目標の投稿情報を取得
+  $post = GetTweetId($main);
+    //削除目標の投稿に画像も投稿されていたらファイルから画像を削除
+    if($post['tweet_img']){
+      DeleteFile_2(PROTO_IMG,COMPRE_IMG,$post['tweet_img']);
+    }
+    //削除目標の投稿に、もし画像付きの返信が投稿されていた場合は一緒に画像ファイルも削除
+    if(isset($post['maxpost']) && $post['maxpost'] !==0){
+      $sql = 'SELECT * FROM replay_posts WHERE reply_id=?';
+      $reply = Select($sql,$post['tweets_id']);
 
-      if(isset($users['reply_img']) && $users['reply_img'] !==null){
-        $file1 = IMAGES_DIR.R_COMPRE_IMG.$users['reply_author_name'].$user['uniq_id'];
-        $file2 = IMAGES_DIR.R_PROTO_IMG.$users['reply_author_name'].$user['uniq_id'];
-        foreach(glob(IMAGES_DIR.R_COMPRE_IMG.'*'.$user['uniq_id'].'*') as $file1){
-          unlink($file1);
+      if(isset($reply['reply_img']) && $reply['reply_img'] !==null){
+        $AuthorName = $reply['reply_author_name'];
+        $UniqueId = $post['uniq_id'];
+        $R_CompreImage = IMAGES_DIR.R_COMPRE_IMG.$AuthorName.$UniqueId;
+        $R_ProtoImage = IMAGES_DIR.R_PROTO_IMG.$AuthorName.$UniqueId;
+        foreach(glob(IMAGES_DIR.R_COMPRE_IMG.'*'.$UniqueId.'*') as $R_CompreImage){
+          unlink($R_CompreImage);
         }
-        foreach(glob(IMAGES_DIR.R_PROTO_IMG.'*'.$user['uniq_id'].'*') as $file2){
-          unlink($file2);
+        foreach(glob(IMAGES_DIR.R_PROTO_IMG.'*'.$UniqueId.'*') as $R_ProtoImage){
+          unlink($R_ProtoImage);
         }
+
       }
     }
 
-    if($_SESSION['id'] === $user['author_id']){
-      if($page === $user['tweets_id'] && $user['maxpost'] > 0){
-      $delete = $db->prepare('DELETE tweets,replay_posts FROM tweets,replay_posts WHERE tweets.tweets_id=? and replay_posts.reply_id=?');
-      $delete->execute(array(
-        $page,
-        $page
-      ));
+  //db削除
+  if($_SESSION['id'] === $post['author_id']){
+    if($main === $post['tweets_id'] && $post['maxpost'] > 0){
+      //投稿の削除
+      DeleteTweet($main);
+      //投稿に付いてる返信たちも削除
+      $sql ='DELETE  FROM replay_posts WHERE reply_id=?';
+      Deletes($sql,$main);
+
       header('Location:index.php');exit();
-        // 返信が付いていない投稿を削除する場合の処理
-      }else {
-          $delete = $db->prepare('DELETE FROM tweets WHERE tweets_id=?');
-          $delete->execute(array($page));
-          header('Location:index.php');exit();
-      }
+      // 返信が付いていない投稿を削除する場合の処理
     }else {
+      //投稿の削除
+      DeleteTweet($main);
+
       header('Location:index.php');exit();
     }
+  }else {
+    header('Location:index.php');exit();
   }
 }
 
-  //返信ページからの削除要請
+
+//②[返信の削除] 返信ページからの削除要請
 if(isset($_REQUEST['Reply'])){
   $reply = $_REQUEST['Reply'];
-  if($reply){
-    if(isset($_SESSION['id'])){
-      $statment = $db->prepare('SELECT * FROM replay_posts WHERE reply_co_id=?');
-      $statment->execute(array($reply));
-      $user = $statment->fetch();
-    }else {
-      header('Location:index.php');exit();
-    }
-
-      //画像ファイルの削除
+  if($reply && isset($_SESSION['id'])){
+    //削除する投稿の情報を取得
+    $user = SelectReply($reply);
+    //画像ファイルの削除
     if(isset($user['reply_img']) && $user['reply_img'] !==null){
-      $file = IMAGES_DIR.R_PROTO_IMG.$user['reply_img'];
-      $files = IMAGES_DIR.R_COMPRE_IMG.$user['reply_img'];
-      unlink($file);
-      unlink($files);
+      DeleteFile_2(R_PROTO_IMG,R_COMPRE_IMG,$user['reply_img']);
     }
 
-    if($_SESSION['id']===$user['reply_author_id']){
+    //db削除
+    if($_SESSION['id'] === $user['reply_author_id']){
       if($reply === $user['reply_co_id']){
-        $delete = $db->prepare('DELETE  FROM replay_posts WHERE reply_co_id=?');
-        $delete->execute(array(
-          $reply
-        ));
-          //最大返信数も変更させるための処理
-        $max = $db->prepare('SELECT COUNT(*) as cnt FROM replay_posts WHERE reply_id=?');
-        $max->execute(array(
-          $user['reply_id']
-        ));
-        $maxpost = $max->fetch();
-
+        //投稿の削除
+        DeleteReply($reply);
+        //返信元の投稿に付いてる返信数を取得
+        $maxpost = GetCount($user['reply_id']);
+        //返信元の投稿数の変更処置
         if($maxpost['cnt'] !==1){
-          $max = $db->prepare('UPDATE tweets SET maxpost=? WHERE tweets_id=?');
-          $max->execute(array(
-            $maxpost['cnt'],
-            $user['reply_id']
-          ));
+          Update($maxpost['cnt'],$user['reply_id']);
         }
-        header('Location:Reply_Posts.php?page='.$user['reply_id']);exit();
+      header('Location:Reply_Posts.php?page='.$user['reply_id']);exit();
       }
-    }else {
+    }else{
       header('Location:index.php');exit();
     }
+  }else {
+    header('Location:index.php');exit();
   }
 }
+
 
   //退会申請
 if(isset($_REQUEST['acount'])){
   $acount = $_REQUEST['acount'];
 
   if(isset($_SESSION['id'])){
-    $statment = $db->prepare('SELECT * FROM userinfo WHERE user_id=?');
-    $statment->execute(array($acount));
-    $user = $statment->fetch();
-
-      // アイコンの削除処理
+    //退会ユーザーの情報を取得
+    $user = GetUserId($acount);
+    //アイコンの削除処理
     if(isset($user['icon']) && $user['icon'] !=='0.png'){
       if($user['icon'] !=='0.png'){
         $file = IMAGES_DIR.P_PROTO_IMG.$user['icon'];
@@ -132,70 +116,45 @@ if(isset($_REQUEST['acount'])){
     }
 
     //退会ユーザーが投稿した全ての画像ファイルの削除
-    $file1 = IMAGES_DIR.COMPRE_IMG.$user['name'];
-    $file2 = IMAGES_DIR.PROTO_IMG.$user['name'];
-    $file3 = IMAGES_DIR.R_COMPRE_IMG.$user['name'];
-    $file4 = IMAGES_DIR.R_PROTO_IMG.$user['name'];
-    foreach(glob(IMAGES_DIR.COMPRE_IMG.$user['name'].'*') as $file1){
-      unlink($file1);
-    }
-    foreach(glob(IMAGES_DIR.PROTO_IMG.$user['name'].'*') as $file2){
-      unlink($file2);
-    }
-    foreach(glob(IMAGES_DIR.R_COMPRE_IMG.$user['name'].'*') as $file3){
-      unlink($file3);
-    }
-    foreach(glob(IMAGES_DIR.R_PROTO_IMG.$user['name'].'*') as $file4){
-      unlink($file4);
+    $CompreImage = IMAGES_DIR.COMPRE_IMG.$user['name'];
+    $ProtoImage = IMAGES_DIR.PROTO_IMG.$user['name'];
+    $R_CompreImage = IMAGES_DIR.R_COMPRE_IMG.$user['name'];
+    $R_ProtoImage = IMAGES_DIR.R_PROTO_IMG.$user['name'];
+    $files = array($CompreImage,$ProtoImage,$R_CompreImage,$R_ProtoImage);
+    foreach ($files as $file) {
+      deletefileforeach($file);
     }
 
-    //dbからユーザー情報の削除と返信数の変更処理
+    //db削除
     if($acount){
-      $base = $db->prepare('SELECT DISTINCT reply_id FROM replay_posts WHERE reply_author_id=?'); //退会処理を行う前に、ユーザーが投稿に対して返信をしているかを確認
-      $base->execute(array($acount));
-      $done = $base->fetch();
-
-      if(isset($done['reply_id']) && $done['reply_id'] !==null){ //投稿に対して返信をしているなら返信数も変更させる
-
-        $statmentt = $db->prepare('SELECT DISTINCT reply_id FROM replay_posts WHERE reply_author_id=?'); //退会処理をする前に退会ユーザーのidを使って、どこの投稿に返信しているか確認
+      //投稿に対して返信をしているか確認
+      $done = GetDistinctReply($acount);
+      //投稿に対して返信をしているなら返信数も変更させる
+      if(isset($done['reply_id']) && $done['reply_id'] !==null){
+        //退会処理をする前に退会ユーザーのidを使って、どこの投稿に返信しているか確認
+        $statmentt = $db->prepare('SELECT DISTINCT reply_id FROM replay_posts WHERE reply_author_id=?');
         $statmentt->execute(array($acount));
 
-        $delete = $db->prepare('DELETE  FROM userinfo where user_id=?'); //ユーザー情報を削除
-        $delete->execute(array($acount));
+        //ユーザーデータの削除
+        DeleteUserId($acount);
+        DeleteReplyPost($acount);
+        DeleteTweet_V($acount);
 
-        $deletea = $db->prepare('DELETE  FROM tweets where author_id=?'); //ツイートを投稿していたら全て削除。ツイートしてなかったら何も処理しない。
-          if(!empty($deletea)){
-            $deletea->execute(array($acount));
-          }
-
-        $deleteb = $db->prepare('DELETE  FROM replay_posts where reply_author_id=?'); //返信ツイートをしていたら削除
-        $deleteb->execute(array($acount));
-
+        //退会ユーザーの情報を全て削除してから、現在の投稿数を改めて取得
         while ($userrr = $statmentt->fetch()) {
-          $statmenttt = $db->prepare('SELECT DISTINCT reply_id FROM replay_posts WHERE reply_id=?'); //先に調べておいた返信先の投稿idをループで取得
+          $statmenttt = $db->prepare('SELECT DISTINCT reply_id FROM replay_posts WHERE reply_id=?');
           $statmenttt->execute(array($userrr['reply_id']));
 
           while ($userrrr = $statmenttt->fetch()) {
-             $deletee = $db->prepare('SELECT COUNT(*) as cnt FROM replay_posts WHERE reply_id=?'); //返信数を取得
-             $deletee->execute(array($userrrr['reply_id']));
-             $maxx = $deletee->fetch();
-             $update = $db->prepare('UPDATE tweets SET maxpost=? WHERE tweets_id=?'); //返信が削除された後の返信数を使って更新させる。
-             $update->execute(array($maxx['cnt'],$userrrr['reply_id']));
+           //最大投稿数を取得
+           $maxx = GetCount($userrrr['reply_id']);
+           //削除に伴う投稿数の更新
+           Update($maxx['cnt'],$userrrr['reply_id']);
           }
         }
-        
-      }elseif($done['reply_id'] === null) { //退会ユーザーが何も投稿も返信もしていない場合の処理
-
-        $delete = $db->prepare('DELETE  FROM userinfo where user_id=?'); //ユーザー情報を削除
-        $delete->execute(array($acount));
-
-        $deletea = $db->prepare('DELETE  FROM tweets where author_id=?'); //ツイートを投稿していたら全て削除。ツイートしてなかったら何も処理しない。
-          if(!empty($deletea)){
-            $deletea->execute(array($acount));
-          }
-
-        $deleteb = $db->prepare('DELETE  FROM replay_posts where reply_author_id=?'); //返信ツイートをしていたら削除
-        $deleteb->execute(array($acount));
+      }elseif($done['reply_id'] === null) {
+        //ユーザーデータの削除
+        DeleteUserId($acount);
       }
     }
     session_destroy();

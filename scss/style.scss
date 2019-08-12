@@ -22,6 +22,8 @@ p{
 .Navigation{
   padding: 10px 0;
   background-color:$common_color1;
+  border-bottom: 2px solid $common_color4;
+  border-top: 2px solid $common_color4;
   .NavigationBox{
     display: flex;
     align-items: center;
@@ -31,6 +33,9 @@ p{
       margin: 0 auto 0 50px;
         .NavigationBrandTitle{
           margin: 0;
+          a{
+            color: $sub_color1;
+          }
         }
     }
     .NavigationList{
@@ -63,17 +68,15 @@ p{
 
 .TweetPostSection{
     padding:50px 0;
-    border-top: 2px solid $common_color4;
-    border-bottom: 2px solid $common_color4;
     background-color: $common_color2;
   .TweetPostFormBox{
     max-width: 700px;
     margin: 0 auto;
       .TweetPostForm{
         text-align: left;
-          .TweetPostTextarea{
-            max-width: 500px;
-          }
+        .TweetPostFormText{
+          width: 100%;
+        }
       }
   }
   .InductionLoginBox{
@@ -134,7 +137,7 @@ main{
     max-width: 800px;
     padding: 20px;
     border-bottom: 1px solid #555;
-    margin: 15px auto;
+    margin: 15px auto -1px;
       .MainIconBox{
         height: 60px;
         width: 60px;
@@ -146,11 +149,12 @@ main{
             }
       }
       .MainAuthorPostBox{
-        width: 700px;
+        width: 100%;
         .MainAuthorName{
           display: flex;
           align-items: center;
-          width: 650px;
+          // width: 650px;
+          max-width: 100%;
           padding: 0 0 5px 0;
           .TimeBox{
             margin-left: auto;
@@ -165,7 +169,7 @@ main{
              }
           }
           .NameBox{
-            padding: 1px 5px;
+            padding: 1px 10px;
             border-radius: 3px;
             background-color:#ccc;
             &:before{
@@ -182,6 +186,9 @@ main{
         }
         .MainPostBox{
           padding: 10px 0;
+          .MainPost{
+            font-size: 1em;
+          }
         }
         .MainPostImageBox{
           text-align: left;
@@ -203,7 +210,7 @@ main{
                 &:hover{
                   opacity: 1;
                 }
-                .caption{
+                .ImageCaption{
                   color: #fff;
                   font-size: 1.5rem;
                 }
@@ -232,9 +239,8 @@ main{
           color:#ccc;
         }
       }
-  }
+    }
 }
-
 
 
 /*------------------------*/
@@ -246,7 +252,7 @@ main{
 .ProfileSectionWrapper{
   .ProfileSection{
     max-width:100%;
-    height: 400px;
+    height: auto;
     margin: 0 auto;
     border-top: 2px solid $common_color4;
     background-color: $common_color2;
@@ -292,6 +298,9 @@ main{
       border-radius: 3px;
       background-color: $common_color5;
       display: none;
+      .Profile{
+        width: 100%;
+      }
       .DeleteBox{
         text-align: right;
           #delete{
@@ -314,17 +323,142 @@ main{
   /*------------------------*/
           /*Reply_Posts.php*/
    /*------------------------*/
-
-
   /*------------------------*/
          /*InsertFormBox*/
   /*------------------------*/
   .InsertFormSection{
+    background-color: $common_color2;
     width: 100%;
       .InsertFormBox{
+        background-color: snow;
         max-width: 500px;
         margin: 50px auto 0;
         border: 1px dashed #555;
         padding: 20px 50px;
       }
+  }
+  /*------------------------*/
+          /*header.php*/
+   /*------------------------*/
+
+  /*------------------------*/
+          /*footer.php*/
+   /*------------------------*/
+  footer{
+    background-color: $common_color5;
+    border-bottom: 2px solid $common_color4;
+    border-top: 2px solid $common_color4;
+    text-align: center;
+    padding: 20px 10px 3px;
+      a{
+        color: $sub_color1;
+      }
+  }
+
+
+  $xl: 1200px;
+  $lg: 992px;
+  $md: 768px;
+  $sm: 576px;
+
+  // @media (max-width: $xl) {
+  // }
+  // @media (max-width: $lg) {
+  // }
+  @media (max-width: $md) {
+
+    //index.php
+    .Navigation{
+      .NavigationBox{
+        display: block;
+      }
+    }
+    main{
+      .MainArticle{
+        padding: 15px;
+        .MainIconBox{
+          margin: 0 10px 0 0;
+        }
+        .MainAuthorPostBox{
+          .MainAuthorName{
+            font-size: 12px;
+          }
+        }
+      }
+    }
+    .TweetPostFormBox{
+      padding: 0 15px;
+    }
+
+    //mypage.php
+.ProfileSectionWrapper{
+  .ProfileSection{
+    .ProfileBox{
+      .UserIconBox{
+        width: 150px;
+        .m-1{
+          img{
+            width: 100%;
+          }
+        }
+        .UserName{
+          font-size: 0.7em;
+        }
+      }
+      .ProfileInnerBox{
+        padding: 20px 10px;
+        .S-IntoroductionBox{
+          margin: 0 0 0 5px;
+          font-size: 0.8em;
+        }
+      }
+    }
+  }
+}
+.ProfileSectionWrapper{
+  .ProfileSection{
+    .ProfileBox{
+      padding: 15px;
+    }
+  }
+}
+.ProfileSectionWrapper{
+  .ProfileSection{
+    .ProfileEditBox{
+      padding: 20px 10px;
+    }
+  }
+}
+
+
+  }
+  @media (max-width: $sm) {
+
+    //index.php
+    .MainPost{
+      font-size: 0.8em!important;
+    }
+
+    // head.php
+    .Navigation{
+      .NavigationBox{
+        .NavigationBrandBox{
+          margin: 0 auto 0 10px;
+        }
+        .NavigationList{
+          margin: 10px 0 0;
+          .NavigationItems{
+            margin: 3px;
+          }
+        }
+      }
+    }
+  }
+
+  .InsertFormSection{
+    padding: 15px;
+    .InsertFormBox{
+      padding: 20px 30px;
+      margin: 20px auto;
+    }
   }

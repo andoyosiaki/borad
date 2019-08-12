@@ -4,22 +4,16 @@ require_once(__DIR__.'/core/dbconect.php');
 require "function/functions.php";
 ini_set('display_errors',1);
 
+$sql = 'SELECT * FROM userinfo INNER JOIN tweets on userinfo.user_id=tweets.author_id WHERE tweets.tweets_id=?';
+$rec = Select($sql,$_REQUEST['page']);
 
-
-
-  $statment = $db->prepare('SELECT * FROM userinfo INNER JOIN tweets on userinfo.user_id=tweets.author_id WHERE tweets.tweets_id=?');
-  $statment->execute(array(
-    $_REQUEST['page']
-  ));
-  $rec = $statment->fetch();
-
+$sqls = 'SELECT * FROM replay_posts JOIN tweets ON replay_posts.reply_id=tweets.tweets_id RIGHT JOIN userinfo ON userinfo.user_id=replay_posts.reply_author_id WHERE replay_posts.reply_id=? AND tweets_id=?';
 
   $statments = $db->prepare('SELECT * FROM replay_posts JOIN tweets ON replay_posts.reply_id=tweets.tweets_id RIGHT JOIN userinfo ON userinfo.user_id=replay_posts.reply_author_id WHERE replay_posts.reply_id=? AND tweets_id=?');
   $statments->execute(array(
     $_REQUEST['page'],
     $_REQUEST['page']
   ));
-
 
 ?>
 <?php require_once('./head.php'); ?>
@@ -40,13 +34,13 @@ ini_set('display_errors',1);
           </div>
         </div>
         <div class="MainPostBox">
-          <p><?php echo newline($rec['content']); ?></p>
+          <p class="MainPost"><?php echo newline($rec['content']); ?></p>
         </div>
         <?php if($rec['tweet_img']): ?>
         <div class="MainPostImageBox">
           <object><a href="Detail_Image.php?item=<?php echo $rec['tweets_id']; ?>"><img src="<?php echo IMAGES_DIR.COMPRE_IMG ?><?php echo $rec['tweet_img']; ?>" class="MainPostImage">
           <div class="ImageCover">
-            <div class="caption">Click</div>
+            <div class="ImageCaption">Click</div>
           </div>
           </a></object>
         </div>
@@ -74,13 +68,13 @@ ini_set('display_errors',1);
           </div>
         </div>
         <div class="MainPostBox">
-          <p><?php  $text = h($recs['reply_content']); echo nl2br($text);?></p>
+          <p class="MainPost"><?php  $text = h($recs['reply_content']); echo nl2br($text);?></p>
         </div>
         <?php if($recs['reply_img']): ?>
         <div class="MainPostImageBox">
           <object><a href="Reply_Detail_Image.php?page=<?php echo $recs['reply_img']; ?>"><img src="images/Reply_Compre_img/<?php echo $recs['reply_img']; ?>" class="MainPostImage">
           <div class="ImageCover">
-            <div class="caption">Click</div>
+            <div class="ImageCaption">Click</div>
           </div>
           </a></object>
         </div>
@@ -113,7 +107,12 @@ ini_set('display_errors',1);
     <div class="TweetPostSection">
       <div class="TweetPostFormBox">
       <form class="TweetPostForm" action="Reply_Posts_Validate.php" method="post" enctype="multipart/form-data">
-        <textarea name="re_text" rows="8" cols="80" id="Textarea" placeholder="投稿内容は200文字以下で、画像は2M以下の.jpgか.pngのみUPできます。"></textarea>
+        <?php if(isset($_COOKIE['save']) && $_COOKIE['save'] === 'post'): ?>
+          <p>60秒後に投稿可能になります。</p>
+        <?php elseif(empty($_COOKIE['save'])): ?>
+          <p>現在投稿可能です。</p>
+        <?php endif; ?>
+        <textarea name="re_text" rows="8" cols="80" class="TweetPostFormText" id="Textarea" placeholder="投稿内容は200文字以下で、画像は2M以下の.jpgか.pngのみUPできます。"></textarea>
         <input type="hidden" name="reply_id" value="<?php echo $_REQUEST['page']; ?>">
         <input type="hidden" name="reply_author_id" value="<?php echo $_SESSION['id']; ?>">
         <input type="hidden" name="reply_author_name" value="<?php echo h($_SESSION['name']); ?>">
@@ -141,5 +140,4 @@ ini_set('display_errors',1);
   <?php endif; ?>
   </div>
 <!-- Insert -->
-</body>
-</html>
+<?php require_once('./footer.php'); ?>

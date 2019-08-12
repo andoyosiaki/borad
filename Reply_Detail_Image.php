@@ -5,13 +5,8 @@ require "function/functions.php";
 ini_set('display_errors',1);
 
 
-
-  $statment = $db->prepare('SELECT * FROM replay_posts WHERE reply_img=?');
-  $statment->execute(array(
-    $_REQUEST['page']
-  ));
-  $image= $statment->fetch();
-
+  $sql = 'SELECT * FROM replay_posts WHERE reply_img=?';
+  $image= Select($sql,$_REQUEST['page']);
 
  ?>
 <!DOCTYPE html>

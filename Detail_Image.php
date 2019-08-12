@@ -5,12 +5,7 @@ require "function/functions.php";
 ini_set('display_errors',1);
 
 
-
-  $statment = $db->prepare('SELECT * FROM tweets WHERE tweets_id=?');
-  $statment->execute(array(
-    $_REQUEST['item']
-  ));
-  $image= $statment->fetch();
+  $image = GetTweetId($_REQUEST['item']);
 
  ?>
 <!DOCTYPE html>

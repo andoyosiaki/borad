@@ -66,7 +66,5 @@ if(!empty($_POST)){
       </form>
     </div>
   </div>
-</body>
-<footer>
-
-</footer>
+  
+<?php require_once('./footer.php'); ?>

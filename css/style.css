@@ -14,6 +14,8 @@ p {
 .Navigation {
   padding: 10px 0;
   background-color: #ECD078;
+  border-bottom: 2px solid #542437;
+  border-top: 2px solid #542437;
 }
 .Navigation .NavigationBox {
   display: flex;
@@ -26,6 +28,9 @@ p {
 }
 .Navigation .NavigationBox .NavigationBrandBox .NavigationBrandTitle {
   margin: 0;
+}
+.Navigation .NavigationBox .NavigationBrandBox .NavigationBrandTitle a {
+  color: #555;
 }
 .Navigation .NavigationBox .NavigationList {
   margin: 0 50px;
@@ -54,8 +59,6 @@ p {
 /*------------------------*/
 .TweetPostSection {
   padding: 50px 0;
-  border-top: 2px solid #542437;
-  border-bottom: 2px solid #542437;
   background-color: #D95B43;
 }
 .TweetPostSection .TweetPostFormBox {
@@ -65,8 +68,8 @@ p {
 .TweetPostSection .TweetPostFormBox .TweetPostForm {
   text-align: left;
 }
-.TweetPostSection .TweetPostFormBox .TweetPostForm .TweetPostTextarea {
-  max-width: 500px;
+.TweetPostSection .TweetPostFormBox .TweetPostForm .TweetPostFormText {
+  width: 100%;
 }
 .TweetPostSection .InductionLoginBox {
   max-width: 500px;
@@ -123,7 +126,7 @@ main .MainArticle {
   max-width: 800px;
   padding: 20px;
   border-bottom: 1px solid #555;
-  margin: 15px auto;
+  margin: 15px auto -1px;
 }
 main .MainArticle .MainIconBox {
   height: 60px;
@@ -136,12 +139,12 @@ main .MainArticle .MainIconBox .MinIcon {
   border: 1px solid #ccc;
 }
 main .MainArticle .MainAuthorPostBox {
-  width: 700px;
+  width: 100%;
 }
 main .MainArticle .MainAuthorPostBox .MainAuthorName {
   display: flex;
   align-items: center;
-  width: 650px;
+  max-width: 100%;
   padding: 0 0 5px 0;
 }
 main .MainArticle .MainAuthorPostBox .MainAuthorName .TimeBox {
@@ -157,7 +160,7 @@ main .MainArticle .MainAuthorPostBox .MainAuthorName .TimeBox time:before {
   margin-right: 5px;
 }
 main .MainArticle .MainAuthorPostBox .MainAuthorName .NameBox {
-  padding: 1px 5px;
+  padding: 1px 10px;
   border-radius: 3px;
   background-color: #ccc;
 }
@@ -173,6 +176,9 @@ main .MainArticle .MainAuthorPostBox .MainAuthorName .NameBox a {
 }
 main .MainArticle .MainAuthorPostBox .MainPostBox {
   padding: 10px 0;
+}
+main .MainArticle .MainAuthorPostBox .MainPostBox .MainPost {
+  font-size: 1em;
 }
 main .MainArticle .MainAuthorPostBox .MainPostImageBox {
   text-align: left;
@@ -196,7 +202,7 @@ main .MainArticle .MainAuthorPostBox .MainPostImageBox .ImageCover {
 main .MainArticle .MainAuthorPostBox .MainPostImageBox .ImageCover:hover {
   opacity: 1;
 }
-main .MainArticle .MainAuthorPostBox .MainPostImageBox .ImageCover .caption {
+main .MainArticle .MainAuthorPostBox .MainPostImageBox .ImageCover .ImageCaption {
   color: #fff;
   font-size: 1.5rem;
 }
@@ -231,7 +237,7 @@ main .MainArticle .MainAuthorPostBox .MaxReplayPost {
 /*------------------------*/
 .ProfileSectionWrapper .ProfileSection {
   max-width: 100%;
-  height: 400px;
+  height: auto;
   margin: 0 auto;
   border-top: 2px solid #542437;
   background-color: #D95B43;
@@ -279,6 +285,9 @@ main .MainArticle .MainAuthorPostBox .MaxReplayPost {
   background-color: #53777A;
   display: none;
 }
+.ProfileSectionWrapper .ProfileSection .ProfileEditBox .Profile {
+  width: 100%;
+}
 .ProfileSectionWrapper .ProfileSection .ProfileEditBox .DeleteBox {
   text-align: right;
 }
@@ -302,13 +311,99 @@ main .MainArticle .MainAuthorPostBox .MaxReplayPost {
 /*InsertFormBox*/
 /*------------------------*/
 .InsertFormSection {
+  background-color: #D95B43;
   width: 100%;
 }
 .InsertFormSection .InsertFormBox {
+  background-color: snow;
   max-width: 500px;
   margin: 50px auto 0;
   border: 1px dashed #555;
   padding: 20px 50px;
+}
+
+/*------------------------*/
+/*header.php*/
+/*------------------------*/
+/*------------------------*/
+/*footer.php*/
+/*------------------------*/
+footer {
+  background-color: #53777A;
+  border-bottom: 2px solid #542437;
+  border-top: 2px solid #542437;
+  text-align: center;
+  padding: 20px 10px 3px;
+}
+footer a {
+  color: #555;
+}
+
+@media (max-width: 768px) {
+  .Navigation .NavigationBox {
+    display: block;
+  }
+
+  main .MainArticle {
+    padding: 15px;
+  }
+  main .MainArticle .MainIconBox {
+    margin: 0 10px 0 0;
+  }
+  main .MainArticle .MainAuthorPostBox .MainAuthorName {
+    font-size: 12px;
+  }
+
+  .TweetPostFormBox {
+    padding: 0 15px;
+  }
+
+  .ProfileSectionWrapper .ProfileSection .ProfileBox .UserIconBox {
+    width: 150px;
+  }
+  .ProfileSectionWrapper .ProfileSection .ProfileBox .UserIconBox .m-1 img {
+    width: 100%;
+  }
+  .ProfileSectionWrapper .ProfileSection .ProfileBox .UserIconBox .UserName {
+    font-size: 0.7em;
+  }
+  .ProfileSectionWrapper .ProfileSection .ProfileBox .ProfileInnerBox {
+    padding: 20px 10px;
+  }
+  .ProfileSectionWrapper .ProfileSection .ProfileBox .ProfileInnerBox .S-IntoroductionBox {
+    margin: 0 0 0 5px;
+    font-size: 0.8em;
+  }
+
+  .ProfileSectionWrapper .ProfileSection .ProfileBox {
+    padding: 15px;
+  }
+
+  .ProfileSectionWrapper .ProfileSection .ProfileEditBox {
+    padding: 20px 10px;
+  }
+}
+@media (max-width: 576px) {
+  .MainPost {
+    font-size: 0.8em !important;
+  }
+
+  .Navigation .NavigationBox .NavigationBrandBox {
+    margin: 0 auto 0 10px;
+  }
+  .Navigation .NavigationBox .NavigationList {
+    margin: 10px 0 0;
+  }
+  .Navigation .NavigationBox .NavigationList .NavigationItems {
+    margin: 3px;
+  }
+}
+.InsertFormSection {
+  padding: 15px;
+}
+.InsertFormSection .InsertFormBox {
+  padding: 20px 30px;
+  margin: 20px auto;
 }
 
 /*# sourceMappingURL=style.css.map */

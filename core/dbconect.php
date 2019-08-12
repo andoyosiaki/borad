@@ -5,6 +5,12 @@ define("USERNAME", "root");
 define("PASSWORD", "root");
 define("DATABASE", "twitter");
 define("CHARSET", "utf8");
+// 
+// define("SERVER", "mysql7074.xserver.jp");
+// define("USERNAME", "yutori4dayo_mydb");
+// define("PASSWORD", "yysa7200");
+// define("DATABASE", "yutori4dayo_twitter");
+// define("CHARSET", "utf8");
 
 
 

@@ -29,4 +29,5 @@ if(isset($_SESSION['id'])){
           <p><?php if(isset($logount)) {echo $logount; }?></p>
         </div>
       </div>
-    </body>
+
+<?php require_once('./footer.php'); ?>

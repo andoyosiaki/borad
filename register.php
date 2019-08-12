@@ -47,7 +47,7 @@ if(!empty($_POST)){
 
 
  ?>
- 
+
 <?php require_once('./head.php'); ?>
 
     <div class="InsertFormSection">
@@ -90,5 +90,5 @@ if(!empty($_POST)){
         </form>
       </div>
     </div>
- </body>
- </html>
+    
+<?php require_once('./footer.php'); ?>

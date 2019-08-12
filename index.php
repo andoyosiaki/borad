@@ -7,7 +7,7 @@ ini_set('display_errors',1);
 
 $statment = $db->query('SELECT * FROM tweets INNER JOIN userinfo on userinfo.user_id=tweets.author_id order by tweets.create_at DESC');
 
- ?>
+?>
 
 <?php require_once('./head.php'); ?>
 
@@ -16,6 +16,11 @@ $statment = $db->query('SELECT * FROM tweets INNER JOIN userinfo on userinfo.use
       <?php if(!empty($_SESSION)): ?>
       <div class="TweetPostFormBox">
         <form class="TweetPostForm" action="Posts_Validate.php" method="post" enctype="multipart/form-data">
+          <?php if(isset($_COOKIE['save']) && $_COOKIE['save'] === 'post'): ?>
+            <p>60秒後に投稿可能になります。</p>
+          <?php elseif(empty($_COOKIE['save'])): ?>
+            <p>現在投稿可能です。</p>
+          <?php endif; ?>
           <textarea class="form-control" name="text" rows="5" placeholder="投稿内容は200文字以下で,画像は2M以下の.jpgか.pngのみUPできます。" id="Textarea"></textarea>
           <div class="form-group mt-1 file">
             <label for="File" id="LabelFile"><i class="far fa-image fa-2x "></i></label>
@@ -42,28 +47,28 @@ $statment = $db->query('SELECT * FROM tweets INNER JOIN userinfo on userinfo.use
     <?php while($rec = $statment->fetch()): ?>
     <article class="MainArticle">
       <div class="MainIconBox">
-        <object><a href="Mypage.php?page=<?php echo $rec['user_id']; ?>">
-          <img src="<?php echo IMAGES_DIR.P_COMPRE_IMG ?><?php echo $rec['icon']; ?>" alt="" class="MinIcon">
+        <object><a href="Mypage.php?page=<?php echo h($rec['user_id']); ?>">
+          <img src="<?php echo IMAGES_DIR.P_COMPRE_IMG ?><?php echo h($rec['icon']); ?>" alt="" class="MinIcon">
         </object></a>
       </div>
       <div class="MainAuthorPostBox">
-        <a href="Reply_Posts.php?page=<?php echo $rec['tweets_id'] ;  ?>">
+        <a href="Reply_Posts.php?page=<?php echo h($rec['tweets_id']);  ?>">
           <div class="MainAuthorName">
             <div class="NameBox">
-              <object><a href="Mypage.php?page=<?php echo $rec['user_id']; ?>"><?php echo h($rec['name']); ?></a></object>
+              <object><a href="Mypage.php?page=<?php echo h($rec['user_id']); ?>"><?php echo h($rec['name']); ?></a></object>
             </div>
             <div class="TimeBox">
               <time><?php echo times($rec['created']); ?></time>
             </div>
           </div>
           <div class="MainPostBox">
-            <p><?php echo newline($rec['content']); ?></p>
+            <p class="MainPost"><?php echo newline($rec['content']); ?></p>
           </div>
           <?php if($rec['tweet_img']): ?>
             <div class="MainPostImageBox">
-              <object><a href="Detail_Image.php?item=<?php echo $rec['tweets_id']; ?>"><img src="<?php echo IMAGES_DIR.COMPRE_IMG ?><?php echo $rec['tweet_img']; ?>" class="MainPostImage">
+              <object><a href="Detail_Image.php?item=<?php echo h($rec['tweets_id']); ?>"><img src="<?php echo IMAGES_DIR.COMPRE_IMG ?><?php echo h($rec['tweet_img']); ?>" class="MainPostImage">
               <div class="ImageCover">
-                <div class="caption">Click</div>
+                <div class="ImageCaption">Click</div>
               </div>
               </a></object>
             </div>
@@ -71,28 +76,28 @@ $statment = $db->query('SELECT * FROM tweets INNER JOIN userinfo on userinfo.use
         </a>
         <div class="TinkerBox">
           <div class="ReplyIconBox">
-            <object><a href="Reply_Posts.php?page=<?php echo $rec['tweets_id'] ;  ?>"><i class="far fa-comment fa-lg "></i></a></object>
+            <object><a href="Reply_Posts.php?page=<?php echo h($rec['tweets_id']);  ?>"><i class="far fa-comment fa-lg "></i></a></object>
             <?php if($rec['maxpost'] > 0): ?><span class="MaxReplayPost"><?php echo $rec['maxpost']; ?></span><?php endif; ?>
           </div>
           <?php if($_SESSION && $_SESSION['id'] === $rec['author_id']): ?>
           <div class="DeleteIconBox">
-            <i class="far fa-trash-alt" id="<?php echo $rec['tweets_id']; ?>"></i>
+            <i class="far fa-trash-alt" id="<?php echo h($rec['tweets_id']); ?>"></i>
           </div>
           <?php endif; ?>
         </div>
       </div>
     </article>
     <script>
-      $('#<?php echo $rec['tweets_id']; ?>').click(function(){
+      $('#<?php echo h($rec['tweets_id']); ?>').click(function(){
           if(!confirm('本当に削除しますか？')){
               return false;
           }else{
-              location.href = 'Delete_Post.php?page=<?php echo $rec['tweets_id']; ?>';
+              location.href = 'Delete_Post.php?from_main=<?php echo h($rec['tweets_id']); ?>';
           }
       });
     </script>
     <?php endwhile; ?>
   </main>
 <!-- main -->
- </body>
-</html>
+
+<?php require_once('./footer.php'); ?>

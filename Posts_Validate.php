@@ -4,47 +4,37 @@ require_once(__DIR__.'/core/dbconect.php');
 require "function/functions.php";
 ini_set('display_errors',1);
 
+$img_error = $_FILES['image']['error'];
 
-if($_POST['MAX_FILE_SIZE'] > $_FILES['image']['size']){ //画像サイズの確認
-  $image_size = 'sizetrue';
+if($_POST['MAX_FILE_SIZE'] > $_FILES['image']['size'] && $_COOKIE['save'] === null){ //画像サイズの確認
+  $image_size = 'sizeture';
 }else {
   header('Location:index.php');exit();
 }
 
-$statments = $db->prepare('SELECT * FROM userinfo where user_id=?');
-$statments->execute(array($_SESSION['id']));
-$rec = $statments->fetch();
-
-$img_error = $_FILES['image']['error'];
-
+if(isset($_SESSION['id'])){
   if(isset($_FILES['image']['name']) && $_SERVER['REQUEST_METHOD'] === 'POST' && $image_size){
-    $ext = substr($_FILES['image']['name'],-4);
+    
+    //拡張子を抽出
+    $ext = CutExt_Lower($_FILES['image']['name']);
 
-    if($ext === '.jpg' || $ext === '.png' && $img_error === 0){
+    if($img_error === 0 && $ext === '.jpg' || $ext === '.png'){
+      $rec = GetUserId($_SESSION['id']);
       $day = time();
       $img_adress =  $rec['name'].$day.$_SESSION['id'].$ext;
-      move_uploaded_file($_FILES['image']['tmp_name'],IMAGES_DIR.PROTO_IMG.$img_adress);
 
+      //ファイルの拡張子チェックと保存
+      list($baseImage,$width,$hight) = images($_FILES['image']['tmp_name'],PROTO_IMG,$img_adress);
 
-      list($width, $hight,$info) = getimagesize(IMAGES_DIR.PROTO_IMG.$img_adress); // 元の画像名を指定してサイズを取得
+      // サイズを指定して新しい画像のキャンバスを作成
+      $image = imagecreatetruecolor(THUMB_WIDTH, THUMB_HEIGHT);
 
-      switch($info){
-      case 2:
-      $baseImage = imagecreatefromjpeg(IMAGES_DIR.PROTO_IMG.$img_adress);
-      break;
-      case 3:
-      $baseImage = imagecreatefrompng(IMAGES_DIR.PROTO_IMG.$img_adress);
-      break;
-      }
-      $image = imagecreatetruecolor(200, 140); // サイズを指定して新しい画像のキャンバスを作成
+     if(isset($baseImage)){
+       CreatTtumb($image,$baseImage,COMPRE_IMG,$width,$hight,$img_adress);
+     }else {
+       header('Location:index.php');exit();
+     }
 
-
-       if(isset($baseImage)){ //アップロードされた画像ファイルが偽装ファイルじゃないか確認(不完全)
-       imagecopyresampled($image, $baseImage, 0, 0, 0, 0, 200, 140, $width, $hight);
-       imagejpeg($image,IMAGES_DIR.COMPRE_IMG.$img_adress);
-       }else {
-         header('Location:index.php');exit();
-       }
     }else {
      $img_adress = 0;
      $error = 'extension';
@@ -54,13 +44,17 @@ $img_error = $_FILES['image']['error'];
   }
 
   if(mb_strlen($_POST['text']) < 200){
-   $true_text = $_POST['text'];
+    $true_text = $_POST['text'];
   }else {
-     header('Location:index.php');exit();
+    header('Location:index.php');exit();
   }
 
+
+
     //ログインしてる&POSTでアクセス&テキストが空じゃないor拡張子が.jpgか.pngの場合
-  if($_SESSION['id'] && $_SERVER['REQUEST_METHOD'] === 'POST' && !empty($true_text) || empty($error)){
+    if(isset($_COOKIE['save']) && $_COOKIE['save'] !==null){
+      header('Location:index.php');exit();
+    }elseif($_SESSION['id'] && $_SERVER['REQUEST_METHOD'] === 'POST' && $_COOKIE['save'] === null && !empty($true_text) || empty($error)){
     $uniq = md5(uniqid(rand(),true));
     $statment = $db->prepare('INSERT INTO tweets SET author_id=?,uniq_id=?,content=?,tweet_img=?,create_at=NOW()');
     $statment->execute(array(
@@ -69,6 +63,9 @@ $img_error = $_FILES['image']['error'];
       $_POST['text'],
       $img_adress
     ));
+
+    PostingRestriction();//クッキー作成
+
     header('Location:index.php');exit();
     //ログインしてる&POSTでアクセス&テキストが空&拡張子が.jpgか.png以外の場合
   }elseif ($_SESSION['id'] && $_SERVER['REQUEST_METHOD'] === 'POST' && $true_text ==='' && $error){
@@ -76,3 +73,6 @@ $img_error = $_FILES['image']['error'];
   }else {
     header('Location:index.php');exit();
   }
+}else {
+  header('Location:index.php');exit();
+}
