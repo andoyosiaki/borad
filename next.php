@@ -1,8 +1,6 @@
 <?php
 session_start();
-require_once(__DIR__.'/core/dbconect.php');
-ini_set('display_errors',1);
-
+require_once __DIR__."/core/dbconect.php";
 
 if(isset($_SESSION['join'])){
   $statment = $db->prepare('INSERT INTO userinfo SET name=?,password=?,created=NOW(),icon=?');

@@ -1,19 +1,16 @@
 <?php
 session_start();
-require_once(__DIR__.'/core/dbconect.php');
+require_once __DIR__."/core/dbconect.php";
 require "function/functions.php";
-ini_set('display_errors',1);
 
 $sql = 'SELECT * FROM userinfo INNER JOIN tweets on userinfo.user_id=tweets.author_id WHERE tweets.tweets_id=?';
 $rec = Select($sql,$_REQUEST['page']);
 
-$sqls = 'SELECT * FROM replay_posts JOIN tweets ON replay_posts.reply_id=tweets.tweets_id RIGHT JOIN userinfo ON userinfo.user_id=replay_posts.reply_author_id WHERE replay_posts.reply_id=? AND tweets_id=?';
-
-  $statments = $db->prepare('SELECT * FROM replay_posts JOIN tweets ON replay_posts.reply_id=tweets.tweets_id RIGHT JOIN userinfo ON userinfo.user_id=replay_posts.reply_author_id WHERE replay_posts.reply_id=? AND tweets_id=?');
-  $statments->execute(array(
-    $_REQUEST['page'],
-    $_REQUEST['page']
-  ));
+$statments = $db->prepare('SELECT * FROM replay_posts JOIN tweets ON replay_posts.reply_id=tweets.tweets_id RIGHT JOIN userinfo ON userinfo.user_id=replay_posts.reply_author_id WHERE replay_posts.reply_id=? AND tweets_id=?');
+$statments->execute(array(
+  $_REQUEST['page'],
+  $_REQUEST['page']
+));
 
 ?>
 <?php require_once('./head.php'); ?>
@@ -48,7 +45,6 @@ $sqls = 'SELECT * FROM replay_posts JOIN tweets ON replay_posts.reply_id=tweets.
       </div>
     </article>
   </main>
-
 <!-- ReplaySecsion -->
   <main>
     <?php while($recs = $statments->fetch()): ?>
@@ -72,7 +68,7 @@ $sqls = 'SELECT * FROM replay_posts JOIN tweets ON replay_posts.reply_id=tweets.
         </div>
         <?php if($recs['reply_img']): ?>
         <div class="MainPostImageBox">
-          <object><a href="Reply_Detail_Image.php?page=<?php echo $recs['reply_img']; ?>"><img src="images/Reply_Compre_img/<?php echo $recs['reply_img']; ?>" class="MainPostImage">
+          <object><a href="Detail_Image.php?page=<?php echo $recs['reply_img']; ?>"><img src="images/Reply_Compre_img/<?php echo $recs['reply_img']; ?>" class="MainPostImage">
           <div class="ImageCover">
             <div class="ImageCaption">Click</div>
           </div>
@@ -108,9 +104,9 @@ $sqls = 'SELECT * FROM replay_posts JOIN tweets ON replay_posts.reply_id=tweets.
       <div class="TweetPostFormBox">
       <form class="TweetPostForm" action="Reply_Posts_Validate.php" method="post" enctype="multipart/form-data">
         <?php if(isset($_COOKIE['save']) && $_COOKIE['save'] === 'post'): ?>
-          <p>60秒後に投稿可能になります。</p>
+        <p>60秒後に投稿可能になります。</p>
         <?php elseif(empty($_COOKIE['save'])): ?>
-          <p>現在投稿可能です。</p>
+        <p>現在投稿可能です。</p>
         <?php endif; ?>
         <textarea name="re_text" rows="8" cols="80" class="TweetPostFormText" id="Textarea" placeholder="投稿内容は200文字以下で、画像は2M以下の.jpgか.pngのみUPできます。"></textarea>
         <input type="hidden" name="reply_id" value="<?php echo $_REQUEST['page']; ?>">
@@ -126,18 +122,17 @@ $sqls = 'SELECT * FROM replay_posts JOIN tweets ON replay_posts.reply_id=tweets.
       </form>
       </div>
     </div>
-  <?php elseif(!$_SESSION): ?>
-  <div class="TweetPostSection">
-  <div class="InductionLoginBox">
-    <p>ログインすると投稿可能になります。</p>
-    <div class="Induction">
-      <a href="login.php"><button type="button" class="btn bg-primary">Login</button></a>
-      <a href="Register.php"><button type="button" class="btn bg-warning">Register</button></a>
+    <?php elseif(!$_SESSION): ?>
+    <div class="TweetPostSection">
+      <div class="InductionLoginBox">
+        <p>ログインすると投稿可能になります。</p>
+        <div class="Induction">
+          <a href="login.php"><button type="button" class="btn bg-primary">Login</button></a>
+          <a href="Register.php"><button type="button" class="btn bg-warning">Register</button></a>
+        </div>
+      </div>
     </div>
-    </div>
-  </div>
-    </div>
-  <?php endif; ?>
+    <?php endif; ?>
   </div>
 <!-- Insert -->
 <?php require_once('./footer.php'); ?>

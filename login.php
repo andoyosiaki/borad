@@ -1,9 +1,7 @@
 <?php
 session_start();
-require_once(__DIR__.'/core/dbconect.php');
+require_once __DIR__."/core/dbconect.php";
 require "function/functions.php";
-ini_set('display_errors',1);
-
 
 $errors['errors'] = NULL;
 //$_POSTの情報がdbにあったら$_SESSIONにデータ挿入
@@ -31,7 +29,6 @@ if(!empty($_POST)){
   }
 }
 
-
 ?>
 
 <?php require_once('./head.php'); ?>
@@ -44,27 +41,27 @@ if(!empty($_POST)){
           <label for="exampleInputEmail1">アカウント名</label>
           <?php if(isset($_SESSION['join']['name'])): ?>
           <input type="text" name="name" value="<?php echo $_SESSION['join']['name']; ?>" placeholder="アカウント名" class="form-control" id="exampleInputEmail1">
-        <?php else: ?>
+          <?php else: ?>
           <input type="text" name="name" value="" placeholder="アカウント名" class="form-control" id="exampleInputEmail1">
-        <?php endif; ?>
+          <?php endif; ?>
           <?php if($errors['errors'] === 'miss1'): ?>
-            <p>入力に誤りがあります</p>
+          <p>入力に誤りがあります</p>
           <?php endif; ?>
           <?php if($errors['errors'] === 'miss2'): ?>
-            <p>入力に誤りがあります</p>
+          <p>入力に誤りがあります</p>
           <?php endif; ?>
         </div>
         <div class="form-group">
           <label for="exampleInputPassword1">パスワード</label>
           <?php if(isset($_SESSION['join']['password'])): ?>
           <input type="password" name="password" value="<?php echo $_SESSION['join']['password']; ?>" placeholder="パスワード" class="form-control" id="exampleInputPassword1">
-        <?php else: ?>
+          <?php else: ?>
           <input type="password" name="password" value="" placeholder="パスワード" class="form-control" id="exampleInputPassword1">
-        <?php endif; ?>
+          <?php endif; ?>
         </div>
         <button type="submit" class="btn btn-primary">送信する</button>
       </form>
     </div>
   </div>
-  
+
 <?php require_once('./footer.php'); ?>

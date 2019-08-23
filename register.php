@@ -1,6 +1,6 @@
 <?php
 session_start();
-require_once(__DIR__.'/core/dbconect.php');
+require_once __DIR__."/core/dbconect.php";
 
 if(!empty($_POST)){
     //アカウント名空判定
@@ -41,7 +41,6 @@ if(!empty($_POST)){
   if(empty($error)){
     $_SESSION['join'] = $_POST;
     header('Location:next.php');exit();
-    var_dump($_SESSION['join']);
   }
 }
 
@@ -50,45 +49,45 @@ if(!empty($_POST)){
 
 <?php require_once('./head.php'); ?>
 
-    <div class="InsertFormSection">
-      <div class="InsertFormBox">
-        <h2>会員登録画面</h2>
-        <form class="" action="" method="post">
-          <div class="form-group">
-            <label for="exampleInputEmail1">アカウント名</label>
-            <input type="text" name="name" value="" placeholder="アカウント名" class="form-control" id="exampleInputEmail1">
-            <?php if($error['name'] === 'blank'): ?>
-              <p class="attension">入力が空です</p>
-            <?php endif; ?>
-            <?php if($error['name'] === 'alph_chara_name'): ?>
-              <p class="attension">半角英数字</p>
-            <?php endif; ?>
-            <?php if($error['name'] === 'name_length'): ?>
-              <p class="attension">10文字以下</p>
-            <?php endif; ?>
-            <?php if($error['name'] === 'duplicate'): ?>
-              <p class="attension">このアカウント名は使えません</p>
-            <?php endif; ?>
-            <small class="text-muted">アカウント名は半角英数文字の10文字以下でお願いします。</small>
-          </div>
-          <div class="form-group">
-            <label for="exampleInputPassword1">パスワード</label>
-            <input type="password" name="password" value="" placeholder="パスワード" class="form-control" id="exampleInputPassword1">
-            <?php if($error['password'] === 'blank'): ?>
-              <p class="attension">入力が空です</p>
-            <?php endif; ?>
-            <?php if($error['password'] === 'alph_chara_pass'): ?>
-              <p class="attension">半角英数字</p>
-            <?php endif; ?>
-            <?php if($error['password'] === 'name_length'): ?>
-              <p class="attension">４文字以上</p>
-            <?php endif; ?>
-            <small class="text-muted">パスワードは半角英数字で４文字以上でお願いします。</small>
-          </div>
-          <input type="hidden" name="icon" value="0.png">
-          <button type="submit" class="btn btn-primary">送信する</button>
-        </form>
-      </div>
+  <div class="InsertFormSection">
+    <div class="InsertFormBox">
+      <h2>会員登録画面</h2>
+      <form class="" action="" method="post">
+        <div class="form-group">
+          <label for="exampleInputEmail1">アカウント名</label>
+          <input type="text" name="name" value="" placeholder="アカウント名" class="form-control" id="exampleInputEmail1">
+          <?php if($error['name'] === 'blank'): ?>
+          <p class="attension">入力が空です</p>
+          <?php endif; ?>
+          <?php if($error['name'] === 'alph_chara_name'): ?>
+          <p class="attension">半角英数字</p>
+          <?php endif; ?>
+          <?php if($error['name'] === 'name_length'): ?>
+          <p class="attension">10文字以下</p>
+          <?php endif; ?>
+          <?php if($error['name'] === 'duplicate'): ?>
+          <p class="attension">このアカウント名は使えません</p>
+          <?php endif; ?>
+          <small class="text-muted">アカウント名は半角英数文字の10文字以下でお願いします。</small>
+        </div>
+        <div class="form-group">
+          <label for="exampleInputPassword1">パスワード</label>
+          <input type="password" name="password" value="" placeholder="パスワード" class="form-control" id="exampleInputPassword1">
+          <?php if($error['password'] === 'blank'): ?>
+          <p class="attension">入力が空です</p>
+          <?php endif; ?>
+          <?php if($error['password'] === 'alph_chara_pass'): ?>
+          <p class="attension">半角英数字</p>
+          <?php endif; ?>
+          <?php if($error['password'] === 'name_length'): ?>
+          <p class="attension">４文字以上</p>
+          <?php endif; ?>
+          <small class="text-muted">パスワードは半角英数字で４文字以上でお願いします。</small>
+        </div>
+        <input type="hidden" name="icon" value="0.png">
+        <button type="submit" class="btn btn-primary">送信する</button>
+      </form>
     </div>
-    
+  </div>
+
 <?php require_once('./footer.php'); ?>

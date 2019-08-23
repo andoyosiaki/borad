@@ -1,9 +1,7 @@
 <?php
 session_start();
-require_once(__DIR__.'/core/dbconect.php');
+require_once __DIR__."/core/dbconect.php";
 require "function/functions.php";
-
-ini_set('display_errors',1);
 
 $statment = $db->query('SELECT * FROM tweets INNER JOIN userinfo on userinfo.user_id=tweets.author_id order by tweets.create_at DESC');
 
@@ -17,15 +15,15 @@ $statment = $db->query('SELECT * FROM tweets INNER JOIN userinfo on userinfo.use
       <div class="TweetPostFormBox">
         <form class="TweetPostForm" action="Posts_Validate.php" method="post" enctype="multipart/form-data">
           <?php if(isset($_COOKIE['save']) && $_COOKIE['save'] === 'post'): ?>
-            <p>60秒後に投稿可能になります。</p>
+          <p>60秒後に投稿可能になります。</p>
           <?php elseif(empty($_COOKIE['save'])): ?>
-            <p>現在投稿可能です。</p>
+          <p>現在投稿可能です。</p>
           <?php endif; ?>
           <textarea class="form-control" name="text" rows="5" placeholder="投稿内容は200文字以下で,画像は2M以下の.jpgか.pngのみUPできます。" id="Textarea"></textarea>
           <div class="form-group mt-1 file">
             <label for="File" id="LabelFile"><i class="far fa-image fa-2x "></i></label>
             <input type="hidden" name="MAX_FILE_SIZE" value="<?php echo MAX_FILE_SIZE; ?>">
-            <input type="file" name="image" id="File">
+            <input type="file" name="image" id="File" name="upfile" id="upfile" accept="image/*">
           </div>
           <button type="submit" class="btn btn-lg FormBtn">　送　信　</button>
         </form>
@@ -38,8 +36,8 @@ $statment = $db->query('SELECT * FROM tweets INNER JOIN userinfo on userinfo.use
           <a href="Register.php"><button type="button" class="btn bg-warning">Register</button></a>
         </div>
       </div>
-    </div>
       <?php endif; ?>
+    </div>
 <!-- TweetPostSection & Form -->
   </header>
 <!-- main -->
@@ -65,13 +63,13 @@ $statment = $db->query('SELECT * FROM tweets INNER JOIN userinfo on userinfo.use
             <p class="MainPost"><?php echo newline($rec['content']); ?></p>
           </div>
           <?php if($rec['tweet_img']): ?>
-            <div class="MainPostImageBox">
-              <object><a href="Detail_Image.php?item=<?php echo h($rec['tweets_id']); ?>"><img src="<?php echo IMAGES_DIR.COMPRE_IMG ?><?php echo h($rec['tweet_img']); ?>" class="MainPostImage">
-              <div class="ImageCover">
-                <div class="ImageCaption">Click</div>
-              </div>
-              </a></object>
+          <div class="MainPostImageBox">
+            <object><a href="Detail_Image.php?item=<?php echo h($rec['tweets_id']); ?>"><img src="<?php echo IMAGES_DIR.COMPRE_IMG ?><?php echo h($rec['tweet_img']); ?>" class="MainPostImage">
+            <div class="ImageCover">
+              <div class="ImageCaption">Click</div>
             </div>
+            </a></object>
+          </div>
           <?php endif; ?>
         </a>
         <div class="TinkerBox">

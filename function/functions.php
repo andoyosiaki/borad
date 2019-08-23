@@ -7,7 +7,7 @@ define('P_PROTO_IMG','Profile_Proto_img/'); //プロフィール元画像
 define('R_COMPRE_IMG','Reply_Compre_img/'); //返信加工画像
 define('R_PROTO_IMG','Reply_Proto_img/'); //返信元画像
 
-define('MAX_FILE_SIZE', 5 * 1024 * 1024); // 1MB
+define('MAX_FILE_SIZE', 10 * 1024 * 1024); // 10MB
 
 //サムネイルサイズ
 define('THUMB_WIDTH',200);
@@ -17,22 +17,6 @@ define('THUMB_HEIGHT',140);
 define('ICON_SIZE',100);
 
 function GetDB(){
-  // define("SERVERs", "localhost");
-  // define("USERNAMEs", "root");
-  // define("PASSWORDs", "root");
-  // define("DATABASEs", "twitter");
-  // define("CHARSETs", "utf8");
-  //
-  // define("DSNs", "mysql:host=".SERVERs.";dbname=".DATABASEs.";charset=".CHARSETs);
-
-  // $SERVERs = "localhost";
-  // $USERNAMEs = "root";
-  // $PASSWORDs = "root";
-  // $DATABASEs = "twitter";
-  // $CHARSETs= "utf8";
-  //
-  // $DSNs =  "mysql:host=".$SERVERs.";dbname=".$DATABASEs.";charset=".$CHARSETs);
-
   try {
     $db = new PDO('mysql:dbname=twitter;host=localhost;charset=utf8','root', 'root');
     $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
@@ -196,6 +180,18 @@ function DeleteFile_2($dir1,$dir2,$data){
   unlink($file2);
 }
 
+function CreateImagePath($data,$extension){
+  if(isset($data)){
+    $uniq_id = GetTweetId($data);
+    $uniq = $uniq_id['uniq_id'];
+    $day = time();
+    return  $img =  $_SESSION['name'].$uniq.$day.$_SESSION['id'].$extension;
+  }elseif(is_null($data)) {
+    $rec = GetUserId($_SESSION['id']);
+    $day = time();
+    return  $img =  $rec['name'].$day.$_SESSION['id'].$extension;
+  }
+}
 
 
 
