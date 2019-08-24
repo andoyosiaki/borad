@@ -16,6 +16,9 @@ define('THUMB_HEIGHT',140);
 //アイコンサイズ
 define('ICON_SIZE',100);
 
+//cookie投稿制限
+define('INTERVAL',1);
+
 function GetDB(){
   try {
     $db = new PDO('mysql:dbname=twitter;host=localhost;charset=utf8','root', 'root');
@@ -219,8 +222,6 @@ function deletefileforeach($filepass){
 function PostingRestriction(){
   $key = 'save';
   $value = 'post';
-  $time = time()+1;
+  $time = time()+INTERVAL;
   setcookie($key,$value,$time);
 }
-
- ?>

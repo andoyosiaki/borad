@@ -13,7 +13,7 @@ $statment = $db->query('SELECT * FROM tweets INNER JOIN userinfo on userinfo.use
       <div class="TweetPostFormBox">
         <form class="TweetPostForm" action="Posts_Validate.php" method="post" enctype="multipart/form-data">
           <?php if(isset($_COOKIE['save']) && $_COOKIE['save'] === 'post'): ?>
-          <p>60秒後に投稿可能になります。</p>
+          <p><?php echo INTERVAL ?>秒後に投稿可能になります。</p>
           <?php elseif(empty($_COOKIE['save'])): ?>
           <p>現在投稿可能です。</p>
           <?php endif; ?>
