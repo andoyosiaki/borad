@@ -21,7 +21,7 @@ define('INTERVAL',1);
 
 function GetDB(){
   try {
-    $db = new PDO('mysql:dbname=twitter;host=localhost;charset=utf8','root', 'root');
+    $db = new PDO('mysql:dbname=ImageBoard;host=localhost;charset=utf8','root', 'root');
     $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
   } catch (PDOException $e) {
     echo $e->getMessage();
