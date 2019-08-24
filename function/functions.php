@@ -7,7 +7,7 @@ define('P_PROTO_IMG','Profile_Proto_img/'); //プロフィール元画像
 define('R_COMPRE_IMG','Reply_Compre_img/'); //返信加工画像
 define('R_PROTO_IMG','Reply_Proto_img/'); //返信元画像
 
-define('MAX_FILE_SIZE', 10 * 1024 * 1024); // 10MB
+define('MAX_FILE_SIZE', 2 * 1024 * 1024); // 画像投稿可能サイズ
 
 //サムネイルサイズ
 define('THUMB_WIDTH',200);
@@ -21,7 +21,7 @@ define('INTERVAL',1);
 
 function GetDB(){
   try {
-    $db = new PDO('mysql:dbname=ImageBoard;host=localhost;charset=utf8','root', 'root');
+    $db = new PDO('mysql:dbname=twitter;host=localhost;charset=utf8','root', 'root');
     $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
   } catch (PDOException $e) {
     echo $e->getMessage();
