@@ -5,10 +5,9 @@ require __DIR__."/function/functions.php";
 
 //非ログインユーザーのアクセス除外
 if(isset($_SESSION['id'])){
-  // $data = array($_REQUEST['page']);
   $rec = GetUserId($_REQUEST['page']);
 
-    //存在しないユーザーページにアクセスしない処理
+
   if($_REQUEST['page'] === $rec['user_id']){
     $statments = $db->prepare('SELECT * FROM tweets INNER JOIN userinfo on userinfo.user_id=tweets.author_id WHERE author_id=? order by tweets.create_at DESC');
     $statments->execute(array(
@@ -24,7 +23,6 @@ if(isset($_SESSION['id'])){
  ?>
 
 <?php require_once('./head.php'); ?>
-
 <!-- ProfileSection -->
 <div class="ProfileSectionWrapper">
   <div class="ProfileSection">
@@ -77,7 +75,7 @@ if(isset($_SESSION['id'])){
   </div>
 </div>
 <!-- ProfileSection -->
-<!-- UserPostssection -->
+<!-- UserPostsSection -->
 <main>
   <?php while($rec = $statments->fetch()): ?>
   <article class="MainArticle">
@@ -132,5 +130,5 @@ if(isset($_SESSION['id'])){
   </article>
   <?php endwhile; ?>
 </main>
-
+<!-- UserPostsSection -->
 <?php require_once('./footer.php'); ?>

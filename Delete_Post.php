@@ -50,7 +50,6 @@ if(isset($_REQUEST['from_main']) && isset($_SESSION['id'])){
     }else {
       //投稿の削除
       DeleteTweet($main);
-
       header('Location:index.php');exit();
     }
   }else {
@@ -118,7 +117,6 @@ if(isset($_REQUEST['acount']) && isset($_SESSION['id'])){
       //退会処理をする前に退会ユーザーのidを使って、どこの投稿に返信しているか確認
       $statement = $db->prepare('SELECT DISTINCT reply_id FROM replay_posts WHERE reply_author_id=?');
       $statement->execute(array($acount));
-
       //ユーザーデータの削除
       DeleteUserId($acount);
       DeleteReplyPost($acount);
@@ -128,7 +126,12 @@ if(isset($_REQUEST['acount']) && isset($_SESSION['id'])){
       while ($user = $statement->fetch()) {
         $statements = $db->prepare('SELECT DISTINCT reply_id FROM replay_posts WHERE reply_id=?');
         $statements->execute(array($user['reply_id']));
-        while ($userpost = $statements->fetch()) {
+        $userpost = $statements->fetch();
+        if($userpost === false){
+          $zero = 0;
+          //削除に伴う投稿数の更新
+          Update($zero,$user['reply_id']);
+        }elseif($userpost !==false){
          //最大投稿数を取得
          $maxpost = GetCount($userpost['reply_id']);
          //削除に伴う投稿数の更新

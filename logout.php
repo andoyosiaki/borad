@@ -20,7 +20,6 @@ if(isset($_SESSION['id'])){
  ?>
 
 <?php require_once('./head.php'); ?>
-
     </header>
     <body>
       <div class="InsertFormSection">
@@ -28,5 +27,4 @@ if(isset($_SESSION['id'])){
           <p><?php if(isset($logount)) {echo $logount; }?></p>
         </div>
       </div>
-
 <?php require_once('./footer.php'); ?>

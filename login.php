@@ -3,7 +3,7 @@ session_start();
 require_once __DIR__."/core/dbconect.php";
 require "function/functions.php";
 
-$errors['errors'] = NULL;
+$errors = NULL;
 //$_POSTの情報がdbにあったら$_SESSIONにデータ挿入
 if(!empty($_POST)){
   if(!$_POST['name'] !=='' && !$_POST['password'] !=='' ){
@@ -20,19 +20,16 @@ if(!empty($_POST)){
       $_SESSION['icon'] = $rec['icon'];
       $_SESSION['time'] = time();
       header('Location:index.php');exit();
-      echo "成功";
     }else {
-        $errors['errors'] = 'miss1';
+        $errors = 'miss1';
     }
   }else {
-      $errors['errors'] = 'miss2';
+      $errors = 'miss2';
   }
 }
 
 ?>
-
 <?php require_once('./head.php'); ?>
-
   <div class="InsertFormSection">
     <div class="InsertFormBox">
       <h2>ログイン画面</h2>
@@ -44,10 +41,10 @@ if(!empty($_POST)){
           <?php else: ?>
           <input type="text" name="name" value="" placeholder="アカウント名" class="form-control" id="exampleInputEmail1">
           <?php endif; ?>
-          <?php if($errors['errors'] === 'miss1'): ?>
+          <?php if($errors === 'miss1'): ?>
           <p>入力に誤りがあります</p>
           <?php endif; ?>
-          <?php if($errors['errors'] === 'miss2'): ?>
+          <?php if($errors === 'miss2'): ?>
           <p>入力に誤りがあります</p>
           <?php endif; ?>
         </div>
@@ -63,5 +60,4 @@ if(!empty($_POST)){
       </form>
     </div>
   </div>
-
 <?php require_once('./footer.php'); ?>

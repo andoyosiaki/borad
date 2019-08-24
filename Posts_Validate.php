@@ -3,9 +3,7 @@ session_start();
 require_once __DIR__."/core/dbconect.php";
 require "function/functions.php";
 
-
 $img_error = $_FILES['image']['error'];
-
 if($_POST['MAX_FILE_SIZE'] > $_FILES['image']['size'] && $_COOKIE['save'] === null){ //画像サイズの確認
   $image_size = 'sizeture';
 }else {
@@ -29,7 +27,6 @@ if(isset($_SESSION['id']) && $_SERVER['REQUEST_METHOD'] === 'POST'){
      $img_adress = 0;
      $error = 'extension';//拡張子が.jpg.png以外の場合はエラーを挿入してdbに保存させない
     }
-
   }else {
     $img_adress = 0;
   }

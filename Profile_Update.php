@@ -3,11 +3,8 @@ session_start();
 require_once __DIR__."/core/dbconect.php";
 require "function/functions.php";
 
-
 $img_error = $_FILES['image']['error'];
-
 if(isset($_FILES['image']['name'])){
-
   //新しいアイコンを保存する前に古いアイコンの削除処理を行う
     $user = GetUserId($_SESSION['id']);
   if(isset($user['icon']) && $user['icon'] !=='0.png'){
@@ -19,9 +16,7 @@ if(isset($_FILES['image']['name'])){
   if($img_error === 0 && $ext === '.jpg' || $ext === '.png'){
     $day = time();
     $img_adress =  $day.$_SESSION['id'].$ext;
-
     list($baseImage,$width,$hight) = images($_FILES['image']['tmp_name'],P_PROTO_IMG,$img_adress);
-
     $image = imagecreatetruecolor(ICON_SIZE, ICON_SIZE); // サイズを指定して新しい画像のキャンバスを作成
 
     // 画像のコピーと伸縮
@@ -40,7 +35,7 @@ if(isset($_FILES['image']['name'])){
         $img_adress = $_POST['hidden_img'];
      }
    }
-  $statment = $db->prepare('UPDATE userinfo SET intoroduction=?,icon=? WHERE user_id=?');
+  $statment = $db->prepare('UPDATE userinfo SET introduction=?,icon=? WHERE user_id=?');
   $statment->execute(array(
     $_POST['intorotext'],
     $img_adress,

@@ -4,7 +4,6 @@ require_once __DIR__."/core/dbconect.php";
 require "function/functions.php";
 
 $img_error = $_FILES['image']['error'];
-
 if($_POST['MAX_FILE_SIZE'] > $_FILES['image']['size'] && $_COOKIE['save'] === null){ //画像サイズの確認
   $image_size = 'sizeture';
 }else {
@@ -14,6 +13,7 @@ if($_POST['MAX_FILE_SIZE'] > $_FILES['image']['size'] && $_COOKIE['save'] === nu
 //画像のバリデーションと保存処理とサイズの加工処理
 if(isset($_SESSION['id']) && $_SERVER['REQUEST_METHOD'] === 'POST'){
   if(isset($_FILES['image']['name']) && $image_size){
+    
     //拡張子を抽出
     $ext = CutExt_Lower($_FILES['image']['name']);
     if($img_error === 0 && $ext === '.jpg' || $ext === '.png'){
@@ -32,7 +32,6 @@ if(isset($_SESSION['id']) && $_SERVER['REQUEST_METHOD'] === 'POST'){
   }else {
     $img_adress = 0;
   }
-
   if(isset($_COOKIE['save']) && $_COOKIE['save'] !==null || mb_strlen($_POST['re_text']) > 200){
     header('Location:Reply_Posts.php?page='.$_POST['reply_id']);exit();
   }elseif($_SESSION['id'] && !empty($_POST['re_text']) && $_COOKIE['save'] === null || empty($error)){ //ログインしてる&テキストが空じゃないor拡張子が.jpgか.pngだった場合
@@ -46,13 +45,11 @@ if(isset($_SESSION['id']) && $_SERVER['REQUEST_METHOD'] === 'POST'){
     ));
     //クッキー作成
     PostingRestriction();
-
   }elseif ($_SESSION['id'] && $_POST['re_text'] ==='' && $error) { //ログインしてる&テキストが空&拡張子が.jpgか.png以外だった場合
     header('Location:Reply_Posts.php?page='.$_POST['reply_id']);exit();
   }else {
     header('Location:index.php');exit();
   }
-
   //返信数の変更
   if($_SESSION['id'] && $_POST['maxpost']){
     $maxpost = GetCount($_POST['maxpost']);

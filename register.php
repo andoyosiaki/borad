@@ -1,6 +1,7 @@
 <?php
 session_start();
 require_once __DIR__."/core/dbconect.php";
+require "function/functions.php";
 
 if(!empty($_POST)){
     //アカウント名空判定
@@ -29,9 +30,8 @@ if(!empty($_POST)){
   }
     //アカウント名ダブり判定
   if(empty($error)){
-    $statment = $db->prepare('SELECT COUNT(*) AS cnt FROM userinfo WHERE name=?');
-    $statment->execute(array($_POST['name']));
-    $member = $statment->fetch();
+    $sql = 'SELECT COUNT(*) AS cnt FROM userinfo WHERE name=?';
+    $member =  Select($sql,$_POST['name']);
     if($member['cnt'] > 0){
       $error['name'] = 'duplicate';
     }
@@ -44,7 +44,6 @@ if(!empty($_POST)){
   }
 }
 
-
  ?>
 
 <?php require_once('./head.php'); ?>
@@ -56,16 +55,16 @@ if(!empty($_POST)){
         <div class="form-group">
           <label for="exampleInputEmail1">アカウント名</label>
           <input type="text" name="name" value="" placeholder="アカウント名" class="form-control" id="exampleInputEmail1">
-          <?php if($error['name'] === 'blank'): ?>
+          <?php if(isset($error['name']) && $error['name'] === 'blank'): ?>
           <p class="attension">入力が空です</p>
           <?php endif; ?>
-          <?php if($error['name'] === 'alph_chara_name'): ?>
-          <p class="attension">半角英数字</p>
+          <?php if(isset($error['name']) && $error['name'] === 'alph_chara_name'): ?>
+          <p class="attension">半角英数字のみ登録可能です</p>
           <?php endif; ?>
-          <?php if($error['name'] === 'name_length'): ?>
+          <?php if(isset($error['name']) && $error['name'] === 'name_length'): ?>
           <p class="attension">10文字以下</p>
           <?php endif; ?>
-          <?php if($error['name'] === 'duplicate'): ?>
+          <?php if(isset($error['name']) && $error['name'] === 'duplicate'): ?>
           <p class="attension">このアカウント名は使えません</p>
           <?php endif; ?>
           <small class="text-muted">アカウント名は半角英数文字の10文字以下でお願いします。</small>
@@ -73,13 +72,13 @@ if(!empty($_POST)){
         <div class="form-group">
           <label for="exampleInputPassword1">パスワード</label>
           <input type="password" name="password" value="" placeholder="パスワード" class="form-control" id="exampleInputPassword1">
-          <?php if($error['password'] === 'blank'): ?>
+          <?php if(isset($error['password']) && $error['password'] === 'blank'): ?>
           <p class="attension">入力が空です</p>
           <?php endif; ?>
-          <?php if($error['password'] === 'alph_chara_pass'): ?>
-          <p class="attension">半角英数字</p>
+          <?php if(isset($error['password']) && $error['password'] === 'alph_chara_pass'): ?>
+          <p class="attension">半角英数字のみ登録可能です</p>
           <?php endif; ?>
-          <?php if($error['password'] === 'name_length'): ?>
+          <?php if(isset($error['password']) && $error['password'] === 'name_length'): ?>
           <p class="attension">４文字以上</p>
           <?php endif; ?>
           <small class="text-muted">パスワードは半角英数字で４文字以上でお願いします。</small>
