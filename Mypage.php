@@ -21,7 +21,6 @@ if(isset($_SESSION['id'])){
 }
 
  ?>
-
 <?php require_once('./head.php'); ?>
 <!-- ProfileSection -->
 <div class="ProfileSectionWrapper">

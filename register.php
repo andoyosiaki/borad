@@ -45,9 +45,7 @@ if(!empty($_POST)){
 }
 
  ?>
-
 <?php require_once('./head.php'); ?>
-
   <div class="InsertFormSection">
     <div class="InsertFormBox">
       <h2>会員登録画面</h2>
@@ -88,5 +86,4 @@ if(!empty($_POST)){
       </form>
     </div>
   </div>
-
 <?php require_once('./footer.php'); ?>

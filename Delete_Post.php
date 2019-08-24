@@ -57,6 +57,7 @@ if(isset($_REQUEST['from_main']) && isset($_SESSION['id'])){
   }
 }
 
+
 //②[返信の削除] 返信ページからの削除要請
 if(isset($_REQUEST['Reply']) && isset($_SESSION['id'])){
   $reply = $_REQUEST['Reply'];

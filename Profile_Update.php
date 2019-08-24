@@ -4,6 +4,8 @@ require_once __DIR__."/core/dbconect.php";
 require "function/functions.php";
 
 $img_error = $_FILES['image']['error'];
+
+//アイコンの保存処理
 if(isset($_FILES['image']['name'])){
   //新しいアイコンを保存する前に古いアイコンの削除処理を行う
     $user = GetUserId($_SESSION['id']);
@@ -28,20 +30,22 @@ if(isset($_FILES['image']['name'])){
   }
 }
 
- if($_SERVER['REQUEST_METHOD'] === 'POST' && $_SESSION['id'] && mb_strlen($_POST['intorotext']) < 200  ){ //プロフィールのテキストは200文字以内に指定
-    //画像を変更しない場合の処理
-   if($_FILES['image']['name'] === ''){
-     if($_POST['hidden_img'] === null){
-        $img_adress = $_POST['hidden_img'];
-     }
+
+//テキストの保存処理
+if($_SERVER['REQUEST_METHOD'] === 'POST' && $_SESSION['id'] && mb_strlen($_POST['intorotext']) < 200  ){ //プロフィールのテキストは200文字以内に指定
+  //画像を変更しない場合の処理
+ if($_FILES['image']['name'] === ''){
+   if($_POST['hidden_img'] === null){
+      $img_adress = $_POST['hidden_img'];
    }
-  $statment = $db->prepare('UPDATE userinfo SET introduction=?,icon=? WHERE user_id=?');
-  $statment->execute(array(
-    $_POST['intorotext'],
-    $img_adress,
-    $_SESSION['id']
-  ));
-  header("Location:Mypage.php?page=".$_SESSION['id']);exit();
- }else {
-   header("Location:Mypage.php?page=".$_SESSION['id']);exit();
  }
+$statment = $db->prepare('UPDATE userinfo SET introduction=?,icon=? WHERE user_id=?');
+$statment->execute(array(
+  $_POST['intorotext'],
+  $img_adress,
+  $_SESSION['id']
+));
+header("Location:Mypage.php?page=".$_SESSION['id']);exit();
+}else {
+ header("Location:Mypage.php?page=".$_SESSION['id']);exit();
+}

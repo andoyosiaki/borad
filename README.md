@@ -31,7 +31,7 @@
 使用言語・データーベース
 * PHP
 * HTML
-* CSS
+* CSS(SCSS)
 * MYSQL  
 
 使用ツール・ライブラリ

@@ -18,7 +18,6 @@ if(isset($_SESSION['id'])){
 }
 
  ?>
-
 <?php require_once('./head.php'); ?>
     </header>
     <body>
