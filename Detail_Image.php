@@ -29,12 +29,14 @@ if(isset($_REQUEST['item'])){
           height: auto;
         }
     </style>
-    <div class="img_box">
-      <?php if(isset($image['tweet_img'])): ?>
-      <img src="<?php echo IMAGES_DIR.PROTO_IMG ?><?php echo h($image['tweet_img']); ?>" alt="">
-      <?php elseif(isset($image['reply_img'])): ?>
-      <img src="<?php echo IMAGES_DIR.R_PROTO_IMG ?><?php echo h($image['reply_img']); ?>" alt="">
-      <?php endif; ?>
+    <div class="wrap">
+      <div class="img_box">
+        <?php if(isset($image['tweet_img'])): ?>
+        <img src="<?php echo IMAGES_DIR.PROTO_IMG ?><?php echo h($image['tweet_img']); ?>" alt="">
+        <?php elseif(isset($image['reply_img'])): ?>
+        <img src="<?php echo IMAGES_DIR.R_PROTO_IMG ?><?php echo h($image['reply_img']); ?>" alt="">
+        <?php endif; ?>
+      </div>
     </div>
   </body>
 </html>
