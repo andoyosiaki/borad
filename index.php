@@ -3,7 +3,7 @@ session_start();
 require_once __DIR__."/core/dbconect.php";
 require "function/functions.php";
 
-$statment = $db->query('SELECT * FROM tweets INNER JOIN userinfo on userinfo.user_id=tweets.author_id order by tweets.create_at DESC');
+$statement = $db->query('SELECT * FROM tweets INNER JOIN userinfo on userinfo.user_id=tweets.author_id order by tweets.create_at DESC');
 
 ?>
 <?php require_once('./head.php'); ?>
@@ -40,7 +40,7 @@ $statment = $db->query('SELECT * FROM tweets INNER JOIN userinfo on userinfo.use
 <!-- TweetPostSection & Form -->
 <!-- main -->
   <main>
-    <?php while($rec = $statment->fetch()): ?>
+    <?php while($rec = $statement->fetch()): ?>
     <article class="MainArticle">
       <div class="MainIconBox">
         <object><a href="Mypage.php?page=<?php echo h($rec['user_id']); ?>">

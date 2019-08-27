@@ -6,8 +6,8 @@ require "function/functions.php";
 $sql = 'SELECT * FROM userinfo INNER JOIN tweets on userinfo.user_id=tweets.author_id WHERE tweets.tweets_id=?';
 $rec = Select($sql,$_REQUEST['page']);
 
-$statments = $db->prepare('SELECT * FROM replay_posts JOIN tweets ON replay_posts.reply_id=tweets.tweets_id RIGHT JOIN userinfo ON userinfo.user_id=replay_posts.reply_author_id WHERE replay_posts.reply_id=? AND tweets_id=?');
-$statments->execute(array(
+$statement = $db->prepare('SELECT * FROM replay_posts JOIN tweets ON replay_posts.reply_id=tweets.tweets_id RIGHT JOIN userinfo ON userinfo.user_id=replay_posts.reply_author_id WHERE replay_posts.reply_id=? AND tweets_id=?');
+$statement->execute(array(
   $_REQUEST['page'],
   $_REQUEST['page']
 ));
@@ -47,7 +47,7 @@ $statments->execute(array(
   </main>
 <!-- ReplaySecsion -->
   <main>
-    <?php while($recs = $statments->fetch()): ?>
+    <?php while($recs = $statement->fetch()): ?>
     <article class="MainArticle">
       <div class="MainIconBox">
         <a href="Mypage.php?page=<?php echo  $recs['reply_author_id']; ?>">

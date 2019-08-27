@@ -33,9 +33,9 @@ function GetUserId($data){
   $datas = array($data);
   $dbh = getDB();
   $sql = 'SELECT * FROM userinfo WHERE user_id=?';
-  $stetment = $dbh->prepare($sql);
-  $stetment->execute($datas);
-  return  $stetment->fetch();
+  $statement = $dbh->prepare($sql);
+  $statement->execute($datas);
+  return  $statement->fetch();
 }
 
 function DeleteUserId($data){
@@ -50,26 +50,26 @@ function GetTweetId($data){
   $datas = array($data);
   $dbh = getDB();
   $sql = 'SELECT * FROM tweets WHERE tweets_id=?';
-  $stetment = $dbh->prepare($sql);
-  $stetment->execute($datas);
-  return  $stetment->fetch();
+  $statement = $dbh->prepare($sql);
+  $statement->execute($datas);
+  return  $statement->fetch();
 }
 
 function DeleteTweet($data){
   $datas = array($data);
   $dbh = getDB();
   $sql = 'DELETE  FROM tweets WHERE tweets_id=?';
-  $stetment = $dbh->prepare($sql);
-  return $stetment->execute($datas);
+  $statement = $dbh->prepare($sql);
+  return $statement->execute($datas);
 }
 
 function SelectReply($data){
   $datas = array($data);
   $dbh = getDB();
   $sql = 'SELECT * FROM replay_posts WHERE reply_co_id=?';
-  $statment = $dbh->prepare($sql);
-  $statment->execute($datas);
-  return $statment->fetch();
+  $statement = $dbh->prepare($sql);
+  $statement->execute($datas);
+  return $statement->fetch();
 }
 
 function DeleteReply($data){
@@ -92,18 +92,18 @@ function GetDistinctReply($data){
   $datas = array($data);
   $dbh = getDB();
   $sql = 'SELECT DISTINCT reply_id FROM replay_posts WHERE reply_author_id=?';
-  $stetment = $dbh->prepare($sql);
-  $stetment->execute($datas);
-  return $stetment->fetch();
+  $statement = $dbh->prepare($sql);
+  $statement->execute($datas);
+  return $statement->fetch();
 }
 
 function DeleteTweet_V($data){
   $datas = array($data);
   $dbh = getDB();
   $sql = 'DELETE FROM tweets where author_id=?';
-  $statment = $dbh->prepare($sql);
-  if(!empty($statment)){
-    return  $statment->execute($datas);
+  $statement = $dbh->prepare($sql);
+  if(!empty($statement)){
+    return  $statement->execute($datas);
   }
 }
 
@@ -119,9 +119,9 @@ function GetCount($data){
   $datas = array($data);
   $dbh = getDB();
   $sql = 'SELECT COUNT(*) as cnt FROM replay_posts WHERE reply_id=?';
-  $statment = $dbh->prepare($sql);
-  $statment->execute($datas);
-  return $statment->fetch();
+  $statement = $dbh->prepare($sql);
+  $statement->execute($datas);
+  return $statement->fetch();
 }
 
 function Update($key,$value){
@@ -133,9 +133,9 @@ function Update($key,$value){
 function Select($sql,$data){
   $datas = array($data);
   $dbh = GetDB();
-  $statment = $dbh->prepare($sql);
-  $statment->execute($datas);
-  return $statment->fetch();
+  $statement = $dbh->prepare($sql);
+  $statement->execute($datas);
+  return $statement->fetch();
 }
 
 function Deletes($sql,$data){

@@ -9,8 +9,8 @@ if(isset($_SESSION['id'])){
 
 
   if($_REQUEST['page'] === $rec['user_id']){
-    $statments = $db->prepare('SELECT * FROM tweets INNER JOIN userinfo on userinfo.user_id=tweets.author_id WHERE author_id=? order by tweets.create_at DESC');
-    $statments->execute(array(
+    $statement = $db->prepare('SELECT * FROM tweets INNER JOIN userinfo on userinfo.user_id=tweets.author_id WHERE author_id=? order by tweets.create_at DESC');
+    $statement->execute(array(
       $_REQUEST['page']
     ));
   }else {
@@ -76,7 +76,7 @@ if(isset($_SESSION['id'])){
 <!-- ProfileSection -->
 <!-- UserPostsSection -->
 <main>
-  <?php while($rec = $statments->fetch()): ?>
+  <?php while($rec = $statement->fetch()): ?>
   <article class="MainArticle">
     <div class="MainIconBox">
       <a href="Mypage.php?page=<?php echo $rec['user_id']; ?>">
