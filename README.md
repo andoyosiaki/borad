@@ -8,6 +8,7 @@
 アプリ名
 ====
 **<a href="https://board.kagomeee.com/">画像掲示板</a>**
+<img src="https://user-images.githubusercontent.com/52596476/64936282-14f4f980-d890-11e9-90a1-cf003d926c62.png" width=1000>
 
 ## 簡単な説明
 会員制の画像の投稿が可能な掲示板です。  
