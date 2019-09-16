@@ -39,8 +39,8 @@ if($_SERVER['REQUEST_METHOD'] === 'POST' && $_SESSION['id'] && mb_strlen($_POST[
       $img_adress = $_POST['hidden_img'];
    }
  }
-$statment = $db->prepare('UPDATE userinfo SET introduction=?,icon=? WHERE user_id=?');
-$statment->execute(array(
+$statement = $db->prepare('UPDATE userinfo SET introduction=?,icon=? WHERE user_id=?');
+$statement->execute(array(
   $_POST['intorotext'],
   $img_adress,
   $_SESSION['id']

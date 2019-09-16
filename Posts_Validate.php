@@ -36,8 +36,8 @@ if(isset($_SESSION['id']) && $_SERVER['REQUEST_METHOD'] === 'POST'){
       header('Location:index.php');exit();
     }elseif($_SESSION['id'] && !empty($_POST['text']) && $_COOKIE['save'] === null || empty($error)){
       $uniq = md5(uniqid(rand(),true));
-      $statment = $db->prepare('INSERT INTO tweets SET author_id=?,uniq_id=?,content=?,tweet_img=?,create_at=NOW()');
-      $statment->execute(array(
+      $statement = $db->prepare('INSERT INTO tweets SET author_id=?,uniq_id=?,content=?,tweet_img=?,create_at=NOW()');
+      $statement->execute(array(
       $_SESSION['id'],
       $uniq,
       $_POST['text'],

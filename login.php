@@ -7,12 +7,12 @@ $errors = NULL;
 //$_POSTの情報がdbにあったら$_SESSIONにデータ挿入
 if(!empty($_POST)){
   if(!$_POST['name'] !=='' && !$_POST['password'] !=='' ){
-    $statment = $db->prepare('SELECT * FROM userinfo WHERE name=? AND password=?');
-    $statment->execute(array(
+    $statement = $db->prepare('SELECT * FROM userinfo WHERE name=? AND password=?');
+    $statement->execute(array(
       $_POST['name'],
       sha1($_POST['password'])
     ));
-    $rec = $statment->fetch();
+    $rec = $statement->fetch();
 
     if($rec){
       $_SESSION['id'] = $rec['user_id'];
