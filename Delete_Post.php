@@ -104,7 +104,7 @@ if(isset($_REQUEST['acount']) && isset($_SESSION['id'])){
   $ProtoImage = IMAGES_DIR.PROTO_IMG.$user['name'];
   $R_CompreImage = IMAGES_DIR.R_COMPRE_IMG.$user['name'];
   $R_ProtoImage = IMAGES_DIR.R_PROTO_IMG.$user['name'];
-  $files = array($CompreImage,$ProtoImage,$R_CompreImage,$R_ProtoImage);
+  $files = [$CompreImage,$ProtoImage,$R_CompreImage,$R_ProtoImage)];
   foreach ($files as $file) {
     deletefileforeach($file);
   }

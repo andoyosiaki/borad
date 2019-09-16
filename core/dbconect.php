@@ -2,7 +2,7 @@
 define("SERVER", "localhost");
 define("USERNAME", "root");
 define("PASSWORD", "root");
-define("DATABASE", "ImageBoard");
+define("DATABASE", "twitter");
 define("CHARSET", "utf8");
 
 define("DSN", "mysql:host=".SERVER.";dbname=".DATABASE.";charset=".CHARSET);
